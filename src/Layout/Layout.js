@@ -10,7 +10,6 @@ function Layout({ children }) {
         <NavBar />
         {children}
         <Footer />
-        mobile footer
         <MobileFooter />
       </div>
     </>
