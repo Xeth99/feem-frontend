@@ -33,7 +33,7 @@ function Uploader({ setImageUrl }) {
       ) : (
         <div
           {...getRootProps()}
-          className="px-6 w-fulll py-8 border-2 border-border border-dashed bg-main rounded-md cursor-pointer"
+          className="px-6 w-full py-8 border-2 border-border border-dashed bg-main rounded-md cursor-pointer"
         >
           <input {...getInputProps()} />
           <span className="mx-auto flex-colo text-subMain text-3xl">
