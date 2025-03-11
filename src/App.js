@@ -20,36 +20,46 @@ import Users from "./Screens/Dashboards/Admin/Users";
 import NotFound from "./Screens/NotFound";
 import ScrollOnTop from "./ScrollOnTop";
 import ToastContainer from "./Components/Notifications/ToastContainer";
-// import DrawerContext from './Context/DrawerContext'
+import SidebarProvider from "./Context/DrawerContext";
+import { AdminProtectedRoute, ProtectedRouter } from "./ProtectedRouter";
 
 function App() {
   Aos.init();
   return (
     <>
       <ToastContainer />
-      {/* <DrawerContext></DrawerContext>  From the ScrollOnTop will enter
-      it. */}
-      <ScrollOnTop>
-        <Routes>
-          <Route path="/" element={<HomeScreen />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/movies" element={<MoviesPage />} />
-          <Route path="/movie/:id" element={<SingleMovie />} />
-          <Route path="/watch/:id" element={<WatchPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/password" element={<Password />} />
-          <Route path="/favorites" element={<FavoriteMovies />} />
-          <Route path="/movieslist" element={<MoviesList />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/addmovie" element={<AddMovies />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </ScrollOnTop>
+      {/* <SidebarProvider> */}
+        <ScrollOnTop>
+          <Routes>
+            {/* PUBLIC ROUTES */}
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/movies" element={<MoviesPage />} />
+            <Route path="/movie/:id" element={<SingleMovie />} />
+            <Route path="/watch/:id" element={<WatchPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<NotFound />} />
+
+            {/* PRIVATE PUBLIC ROUTES */}
+            <Route element={<ProtectedRouter />}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/password" element={<Password />} />
+              <Route path="/favorites" element={<FavoriteMovies />} />
+
+              {/* ADMIN ROUTES */}
+              <Route element={<AdminProtectedRoute />}>
+                <Route path="/movieslist" element={<MoviesList />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/addmovie" element={<AddMovies />} />
+                <Route path="/users" element={<Users />} />
+              </Route>
+            </Route>
+          </Routes>
+        </ScrollOnTop>
+      {/* </SidebarProvider> */}
     </>
   );
 }

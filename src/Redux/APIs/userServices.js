@@ -24,15 +24,14 @@ const logoutService = () => {
 const loginService = async (user) => {
   try {
     const { data } = await Axios.post("/users/login", user);
-  if (data) {
-    localStorage.setItem("userInfo", JSON.stringify(data));
-  }
-  return data;
+    if (data) {
+      localStorage.setItem("userInfo", JSON.stringify(data));
+    }
+    return data;
   } catch (error) {
     console.error("Login Error:", error.response?.data || error.message);
     throw error;
   }
-  
 };
 
 // update profile API call
@@ -48,10 +47,39 @@ const updateProfileService = async (user, token) => {
     }
     return data;
   } catch (error) {
-    console.error("Update Profile Error:", error.response?.data || error.message);
+    console.error(
+      "Update Profile Error:",
+      error.response?.data || error.message
+    );
     throw error;
   }
-  
 };
 
-export { registerService, logoutService, loginService, updateProfileService };
+// delete profile API call
+const deleteProfileService = async (token) => {
+  try {
+    const { data } = await Axios.delete("/users/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (data) {
+      localStorage.removeItem("userInfo");
+    }
+    return data;
+  } catch (error) {
+    console.error(
+      "Delete Profile Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+export {
+  registerService,
+  logoutService,
+  loginService,
+  updateProfileService,
+  deleteProfileService,
+};

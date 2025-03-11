@@ -2,7 +2,7 @@ import React, { createContext, useMemo, useState } from "react";
 
 export const SidebarContext = createContext();
 
-function DrawerContext({ children }) {
+function SidebarProvider({ children }) {
   const [mobileDrawer, setMobileDrawer] = useState(false);
   const toggleDrawer = () => setMobileDrawer(!mobileDrawer);
   // eslint-disable-next-line
@@ -12,4 +12,4 @@ function DrawerContext({ children }) {
   );
 }
 
-export default DrawerContext;
+export default SidebarProvider;

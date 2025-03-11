@@ -8,18 +8,21 @@ import { useForm } from "react-hook-form";
 import { InlineError } from "../../Components/Notifications/Error";
 import { ImagePreview } from "../../Components/ImagePreview";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { updateProfileAction } from "../../Redux/Actions/userActions";
-import { useNavigate } from "react-router-dom";
+import {
+  deleteProfileAction,
+  updateProfileAction,
+} from "../../Redux/Actions/userActions";
 import toast from "react-hot-toast";
 
 function Profile() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const { userInfo } = useSelector((state) => state.userLogin);
   const [imageUrl, setImageUrl] = useState(userInfo ? userInfo.image : "");
   const { isLoading, isError, isSuccess } = useSelector(
     (state) => state.userUpdateProfile
+  );
+  const { isLoading: deleteLoading, isError: deleteError } = useSelector(
+    (state) => state.userDeleteProfile
   );
 
   // validate user
@@ -32,23 +35,48 @@ function Profile() {
     resolver: yupResolver(ProfileValidation),
   });
 
-  // on submit
+  // update profile
   const onSubmit = (data) => {
     dispatch(updateProfileAction({ ...data, image: imageUrl }));
   };
 
+  // delete profile
+  const deleteProfile = () => {
+    window.confirm("Are you sure you want to delete your account?") &&
+      dispatch(deleteProfileAction());
+  };
+
   useEffect(() => {
-    if (userInfo) {
-      setValue("fullName", userInfo?.fullName);
-      setValue("email", userInfo?.email);
-    }
-    if (isSuccess) {
-      dispatch({ type: "USER_UPDATE_PROFILE_RESET" });
-    }
-    if (isError) {
-      toast.error(isError);
-    }
-  }, [userInfo, setValue, isSuccess, isError, dispatch]);
+  if (userInfo) {
+    setValue("fullName", userInfo.fullName);
+    setValue("email", userInfo.email);
+  }
+}, [userInfo, setValue]); // ✅ Remove unnecessary dependencies
+useEffect(() => {
+  if (isSuccess) {
+    dispatch({ type: "USER_UPDATE_PROFILE_RESET" });
+  }
+}, [isSuccess, dispatch]); // ✅ Avoid unnecessary re-renders
+
+useEffect(() => {
+  if (isError || deleteError) {
+    toast.error(isError || deleteError);
+  }
+}, [isError, deleteError]); // ✅ Only runs when there's an error
+
+
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     setValue("fullName", userInfo?.fullName);
+  //     setValue("email", userInfo?.email);
+  //   }
+  //   if (isSuccess) {
+  //     dispatch({ type: "USER_UPDATE_PROFILE_RESET" });
+  //   }
+  //   if (isError || deleteError) {
+  //     toast.error(isError || deleteError);
+  //   }
+  // }, [userInfo, setValue, isSuccess, isError, dispatch, deleteError]);
   return (
     <SideBar>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
@@ -88,10 +116,17 @@ function Profile() {
           {errors.email && <InlineError text={errors.email.message} />}
         </div>
         <div className="flex gap-2 flex-wrap flex-col-reverse sm:flex-row justify-between items-center my-4">
-          <button className="bg-subMain font-medium transitions hover:bg-main border border-subMain text-white py-3 px-6 rounded w-full sm:w-auto">
-            Delete Account
+          <button
+            onClick={deleteProfile}
+            disabled={deleteLoading || isLoading}
+            className="bg-subMain font-medium transitions hover:bg-main border border-subMain text-white py-3 px-6 rounded w-full sm:w-auto"
+          >
+            {deleteLoading ? "Deleting..." : "Delete Account"}
           </button>
-          <button className="bg-main font-medium transitions hover:bg-subMain border border-subMain text-white py-3 px-6 rounded w-full sm:w-auto">
+          <button
+            disabled={deleteLoading || isLoading}
+            className="bg-main font-medium transitions hover:bg-subMain border border-subMain text-white py-3 px-6 rounded w-full sm:w-auto"
+          >
             {isLoading ? "Updating..." : "Update Profile"}
           </button>
         </div>
