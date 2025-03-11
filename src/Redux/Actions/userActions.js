@@ -19,7 +19,7 @@ const loginAction = (datas) => async (dispatch) => {
 const registerAction = (datas) => async (dispatch) => {
   try {
     dispatch({ type: userConstants.USER_REGISTER_REQUEST });
-    const response = await userApi.loginService(datas);
+    const response = await userApi.registerService(datas);
     dispatch({ type: userConstants.USER_REGISTER_SUCCESS, payload: response });
     dispatch({ type: userConstants.USER_LOGIN_SUCCESS, payload: response });
     toast.success("Registered successfully");
