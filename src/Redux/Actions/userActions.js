@@ -29,13 +29,6 @@ const registerAction = (datas) => async (dispatch) => {
 };
 
 // logout action
-// const logoutAction = () => (dispatch) => {
-//   userApi.loginService();
-//   dispatch({ type: userConstants.USER_LOGOUT });
-//   dispatch({ type: userConstants.USER_LOGIN_RESET });
-//   dispatch({ type: userConstants.USER_REGISTER_REQUEST });
-// };
-
 const logoutAction = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   // Dispatch actions to reset user state
@@ -43,7 +36,6 @@ const logoutAction = () => (dispatch) => {
   dispatch({ type: userConstants.USER_LOGIN_RESET });
   dispatch({ type: userConstants.USER_REGISTER_RESET });
 };
-
 
 // update profile action
 const updateProfileAction = (user) => async (dispatch, getState) => {
@@ -57,7 +49,7 @@ const updateProfileAction = (user) => async (dispatch, getState) => {
       type: userConstants.USER_UPDATE_PROFILE_SUCCESS,
       payload: response,
     });
-    toast.success("Profile Updated");
+    toast.success("Profile updated successfully!");
     dispatch({
       type: userConstants.USER_LOGIN_SUCCESS,
       payload: response,
