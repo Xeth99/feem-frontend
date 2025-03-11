@@ -62,7 +62,7 @@ function NavBar() {
               {userInfo ? (
                 <img
                   src={userInfo?.image ? userInfo?.image : "/images/user.png"}
-                  alt={userInfo.fullName}
+                  alt={userInfo?.fullName}
                   className="w-8 h-8 rounded-full border object-cover border-subMain"
                 />
               ) : (

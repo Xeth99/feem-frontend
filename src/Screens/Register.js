@@ -40,7 +40,7 @@ function Register() {
       navigate("/profile");
     }
     if (isSuccess) {
-      toast.success(`Welcome ${userInfo?.fillName}`);
+      toast.success(`Welcome ${userInfo?.fullName}`);
       dispatch({ type: USER_REGISTER_RESET });
     }
     if (isError) {
@@ -87,7 +87,7 @@ function Register() {
           <div className="w-full">
             <Input
               label="Password"
-              placeholder="************"
+              placeholder="*******"
               type="password"
               name="password"
               register={register("password")}
