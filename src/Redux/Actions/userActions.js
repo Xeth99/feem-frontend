@@ -29,12 +29,21 @@ const registerAction = (datas) => async (dispatch) => {
 };
 
 // logout action
+// const logoutAction = () => (dispatch) => {
+//   userApi.loginService();
+//   dispatch({ type: userConstants.USER_LOGOUT });
+//   dispatch({ type: userConstants.USER_LOGIN_RESET });
+//   dispatch({ type: userConstants.USER_REGISTER_REQUEST });
+// };
+
 const logoutAction = () => (dispatch) => {
-  userApi.loginService();
+  localStorage.removeItem("userInfo");
+  // Dispatch actions to reset user state
   dispatch({ type: userConstants.USER_LOGOUT });
   dispatch({ type: userConstants.USER_LOGIN_RESET });
-  dispatch({ type: userConstants.USER_REGISTER_REQUEST });
+  dispatch({ type: userConstants.USER_REGISTER_RESET });
 };
+
 
 // update profile action
 const updateProfileAction = (user) => async (dispatch, getState) => {
