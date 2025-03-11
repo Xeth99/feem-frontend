@@ -16,7 +16,7 @@ export const tokenProtection = (getState) => {
   const {
     userLogin: { userInfo },
   } = getState();
-  if (userInfo?.token) {
+  if (!userInfo?.token) {
     return null;
   } else {
     return userInfo?.token;

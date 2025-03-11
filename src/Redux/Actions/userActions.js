@@ -8,6 +8,7 @@ const loginAction = (datas) => async (dispatch) => {
   try {
     dispatch({ type: userConstants.USER_LOGIN_REQUEST });
     const response = await userApi.loginService(datas);
+    localStorage.setItem("userInfo", JSON.stringify(datas));
     dispatch({ type: userConstants.USER_LOGIN_SUCCESS, payload: response });
     toast.success("Logged in successfully");
   } catch (error) {

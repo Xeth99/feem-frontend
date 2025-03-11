@@ -55,7 +55,7 @@ function Profile() {
           <div className="col-span-2">
             <ImagePreview
               image={imageUrl}
-              name={userInfo ? userInfo.fullName : "Feem"}
+              name={userInfo ? userInfo?.fullName : "Feem"}
             />
           </div>
         </div>
