@@ -33,7 +33,7 @@ function Profile() {
 
   // on submit
   const onSubmit = (data) => {
-    //  dispatch(updateProfileAction({...data, image: imageUrl}))
+    dispatch(updateProfileAction({ ...data, image: imageUrl }));
     console.log({ ...data, image: imageUrl });
   };
 
