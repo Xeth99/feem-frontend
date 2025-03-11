@@ -10,6 +10,7 @@ import { ImagePreview } from "../../Components/ImagePreview";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { updateProfileAction } from "../../Redux/Actions/userActions";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Profile() {
   const dispatch = useDispatch();
@@ -34,7 +35,6 @@ function Profile() {
   // on submit
   const onSubmit = (data) => {
     dispatch(updateProfileAction({ ...data, image: imageUrl }));
-    console.log({ ...data, image: imageUrl });
   };
 
   useEffect(() => {
@@ -42,7 +42,13 @@ function Profile() {
       setValue("fullName", userInfo?.fullName);
       setValue("email", userInfo?.email);
     }
-  }, [userInfo, setValue]);
+    if (isSuccess) {
+      dispatch({ type: "USER_UPDATE_PROFILE_RESET" });
+    }
+    if (isError) {
+      toast.error(isError);
+    }
+  }, [userInfo, setValue, isSuccess, isError, dispatch]);
   return (
     <SideBar>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
@@ -86,7 +92,7 @@ function Profile() {
             Delete Account
           </button>
           <button className="bg-main font-medium transitions hover:bg-subMain border border-subMain text-white py-3 px-6 rounded w-full sm:w-auto">
-            Update Profile
+            {isLoading ? "Updating..." : "Update Profile"}
           </button>
         </div>
       </form>
