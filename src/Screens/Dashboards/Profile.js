@@ -51,14 +51,20 @@ function Profile() {
       setValue("fullName", userInfo?.fullName);
       setValue("email", userInfo?.email);
     }
+  }, [userInfo, setValue]);
+  
+  useEffect(() => {
     if (isSuccess) {
       dispatch({ type: "USER_UPDATE_PROFILE_RESET" });
     }
+  }, [isSuccess, dispatch]);
+  
+  useEffect(() => {
     if (isError || deleteError) {
       toast.error(isError || deleteError);
-      dispatch("USER_DELETE_PROFILE_RESET");
     }
-  }, [userInfo, setValue, isSuccess, isError, dispatch, deleteError]);
+  }, [isError, deleteError]);
+  
   return (
     <SideBar>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">

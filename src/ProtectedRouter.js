@@ -1,25 +1,28 @@
-import React from "react";
-import { UseSelector, useSelector } from "react-redux";
+import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
 // Public Protection
 function ProtectedRouter() {
   const { userInfo } = useSelector((state) => state.userLogin);
-  return userInfo?.token ? <Outlet /> : <Navigate to="/login" />;
+
+  const isAuthenticated = useMemo(() => !!userInfo?.token, [userInfo]);
+
+  if (isAuthenticated === false) return <Navigate to="/login" replace />;
+
+  return <Outlet />;
 }
 
-// Admin protection
+// Admin Protection
 function AdminProtectedRoute() {
   const { userInfo } = useSelector((state) => state.userLogin);
-  return userInfo?.token ? (
-    userInfo?.isAdmin ? (
-      <Outlet />
-    ) : (
-      <Navigate to="/*" />
-    )
-  ) : (
-    <Navigate to="/login" />
-  );
+
+  const isAdmin = useMemo(() => userInfo?.isAdmin, [userInfo]);
+
+  if (!userInfo?.token) return <Navigate to="/login" replace />;
+  if (!isAdmin) return <Navigate to="/" replace />;
+
+  return <Outlet />;
 }
 
 export { ProtectedRouter, AdminProtectedRoute };
