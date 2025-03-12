@@ -47,36 +47,18 @@ function Profile() {
   };
 
   useEffect(() => {
-  if (userInfo) {
-    setValue("fullName", userInfo.fullName);
-    setValue("email", userInfo.email);
-  }
-}, [userInfo, setValue]); // ✅ Remove unnecessary dependencies
-useEffect(() => {
-  if (isSuccess) {
-    dispatch({ type: "USER_UPDATE_PROFILE_RESET" });
-  }
-}, [isSuccess, dispatch]); // ✅ Avoid unnecessary re-renders
-
-useEffect(() => {
-  if (isError || deleteError) {
-    toast.error(isError || deleteError);
-  }
-}, [isError, deleteError]); // ✅ Only runs when there's an error
-
-
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     setValue("fullName", userInfo?.fullName);
-  //     setValue("email", userInfo?.email);
-  //   }
-  //   if (isSuccess) {
-  //     dispatch({ type: "USER_UPDATE_PROFILE_RESET" });
-  //   }
-  //   if (isError || deleteError) {
-  //     toast.error(isError || deleteError);
-  //   }
-  // }, [userInfo, setValue, isSuccess, isError, dispatch, deleteError]);
+    if (userInfo) {
+      setValue("fullName", userInfo?.fullName);
+      setValue("email", userInfo?.email);
+    }
+    if (isSuccess) {
+      dispatch({ type: "USER_UPDATE_PROFILE_RESET" });
+    }
+    if (isError || deleteError) {
+      toast.error(isError || deleteError);
+      dispatch("USER_DELETE_PROFILE_RESET");
+    }
+  }, [userInfo, setValue, isSuccess, isError, dispatch, deleteError]);
   return (
     <SideBar>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">

@@ -64,18 +64,15 @@ const updateProfileAction = (user) => async (dispatch, getState) => {
 const deleteProfileAction = () => async (dispatch, getState) => {
   try {
     dispatch({ type: userConstants.USER_DELETE_PROFILE_REQUEST });
-    const response = await userApi.deleteProfileService(
-      tokenProtection(getState)
-    );
+    await userApi.deleteProfileService(tokenProtection(getState));
     dispatch({
       type: userConstants.USER_DELETE_PROFILE_SUCCESS,
-      payload: response,
     });
     toast.success("Profile deleted successfully!");
     dispatch(loginAction());
   } catch (error) {
     ErrorAction(error, dispatch, userConstants.USER_DELETE_PROFILE_FAIL);
-    dispatch(userConstants.USER_DELETE_PROFILE_RESET);
+    
   }
 };
 
