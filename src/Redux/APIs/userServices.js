@@ -130,6 +130,41 @@ const deleteFavoriteMoviesService = async (token) => {
   }
 };
 
+// Admin get all users API call
+const getAllUsersService = async (token) => {
+  try {
+    const { data } = await Axios.get("/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error(
+      "Get All Users Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+// admin delete all users API call
+const deleteUserService = async (id, token) => {
+  try {
+    const { data } = await Axios.delete(`/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error(
+      "Delete User Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
 export {
   registerService,
   logoutService,
@@ -139,4 +174,6 @@ export {
   changePasswordService,
   getFavoriteMoviesService,
   deleteFavoriteMoviesService,
+  getAllUsersService,
+  deleteUserService,
 };

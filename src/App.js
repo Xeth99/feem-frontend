@@ -20,7 +20,7 @@ import Users from "./Screens/Dashboards/Admin/Users";
 import NotFound from "./Screens/NotFound";
 import ScrollOnTop from "./ScrollOnTop";
 import ToastContainer from "./Components/Notifications/ToastContainer";
-import SidebarProvider from "./Context/DrawerContext";
+// import SidebarProvider from "./Context/DrawerContext";
 import { AdminProtectedRoute, ProtectedRouter } from "./ProtectedRouter";
 
 function App() {

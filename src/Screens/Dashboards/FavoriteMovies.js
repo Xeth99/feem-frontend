@@ -9,7 +9,7 @@ import {
 } from "../../Redux/Actions/userActions";
 import toast from "react-hot-toast";
 import Loader from "../../Components/Notifications/Loader";
-import Empty from "../../Components/Notifications/Empty";
+import { Empty } from "../../Components/Notifications/Empty";
 
 function FavoriteMovies() {
   const dispatch = useDispatch();
