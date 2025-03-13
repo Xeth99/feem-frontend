@@ -76,10 +76,67 @@ const deleteProfileService = async (token) => {
   }
 };
 
+// change password API call
+const changePasswordService = async (passwords, token) => {
+  try {
+    const { data } = await Axios.put("/users/password", passwords, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error(
+      "Change Password Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+// get all favorite movies API call
+const getFavoriteMoviesService = async (token) => {
+  try {
+    const { data } = await Axios.get("/users/favorite", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error(
+      "Get Favorite Movies Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+// delete all favorite movies API call
+const deleteFavoriteMoviesService = async (token) => {
+  try {
+    const { data } = await Axios.delete("/users/favorite", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error(
+      "Delete Favorite Movies Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
 export {
   registerService,
   logoutService,
   loginService,
   updateProfileService,
   deleteProfileService,
+  changePasswordService,
+  getFavoriteMoviesService,
+  deleteFavoriteMoviesService,
 };
