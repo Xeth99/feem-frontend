@@ -89,12 +89,12 @@ export const userChangePasswordReducer = (state = {}, action) => {
 };
 
 // GET FAVORITE MOVIES
-export const userGetFavoriteMoviesReducer = (state = {}, action) => {
+export const userGetFavoriteMoviesReducer = (state = {likedMovies: [] }, action) => {
   switch (action.type) {
     case userConstants.GET_FAVORITE_MOVIES_REQUEST:
       return { isLoading: true };
     case userConstants.GET_FAVORITE_MOVIES_SUCCESS:
-      return { isLoading: false, favoriteMovies: action.payload };
+      return { isLoading: false, likedMovies: action.payload };
     case userConstants.GET_FAVORITE_MOVIES_FAIL:
       return { isLoading: false, isError: action.payload };
     case userConstants.GET_FAVORITE_MOVIES_RESET:

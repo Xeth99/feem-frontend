@@ -8,7 +8,7 @@ const loginAction = (datas) => async (dispatch) => {
   try {
     dispatch({ type: userConstants.USER_LOGIN_REQUEST });
     const response = await userApi.loginService(datas);
-    localStorage.setItem("userInfo", JSON.stringify(datas));
+    localStorage.setItem("userInfo", JSON.stringify(response));
     dispatch({ type: userConstants.USER_LOGIN_SUCCESS, payload: response });
     toast.success("Logged in successfully");
   } catch (error) {
@@ -86,7 +86,6 @@ const changePasswordAction = (passwords) => async (dispatch, getState) => {
       type: userConstants.USER_CHANGE_PASSWORD_SUCCESS,
       payload: response,
     });
-    toast.success("Password changed successfully!");
   } catch (error) {
     ErrorAction(error, dispatch, userConstants.USER_CHANGE_PASSWORD_FAIL);
   }
@@ -109,16 +108,12 @@ const getFavoriteMoviesAction = () => async (dispatch, getState) => {
 };
 
 // delete favorite movies action
-const deleteFavoriteMoviesAction = (movieId) => async (dispatch, getState) => {
+const deleteFavoriteMoviesAction = () => async (dispatch, getState) => {
   try {
     dispatch({ type: userConstants.DELETE_FAVORITE_MOVIES_REQUEST });
-    const response = await userApi.deleteFavoriteMoviesService(
-      movieId,
-      tokenProtection(getState)
-    );
+    userApi.deleteFavoriteMoviesService(tokenProtection(getState));
     dispatch({
       type: userConstants.DELETE_FAVORITE_MOVIES_SUCCESS,
-      payload: response,
     });
     toast.success("Favorite movies deleted!");
   } catch (error) {
