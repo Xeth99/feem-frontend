@@ -1,5 +1,7 @@
 import Axios from "./Axios";
 
+// ********** PUBLIC APIs **********
+
 // register new user API call
 const registerService = async (user) => {
   try {
@@ -33,6 +35,8 @@ const loginService = async (user) => {
     throw error;
   }
 };
+
+// ********** PRIVATE APIs **********
 
 // update profile API call
 const updateProfileService = async (user, token) => {
@@ -129,6 +133,8 @@ const deleteFavoriteMoviesService = async (token) => {
     throw error;
   }
 };
+
+// ********** ADMIN APIs **********
 
 // Admin get all users API call
 const getAllUsersService = async (token) => {

@@ -6,6 +6,7 @@ import { FiUserCheck } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import MenuDrawer from "../../Components/Drawer/MenuDrawer";
 import { SidebarContext } from "../../Context/DrawerContext";
+import { useSelector } from "react-redux";
 
 function MobileFooter() {
   const { mobileDrawer, toggleDrawer } = useContext(SidebarContext) || {};
@@ -15,6 +16,8 @@ function MobileFooter() {
 
   const Hover = ({ isActive }) =>
     isActive ? `${active} ${inActive}` : inActive;
+
+  const { likedMovies } = useSelector((state) => state.userGetFavoriteMovies);
 
   return (
     <>
@@ -29,7 +32,7 @@ function MobileFooter() {
           <NavLink to="/favorites" className={Hover}>
             <div className="relative">
               <div className="w-5 h-5 flex-colo rounded-full text-xs bg-subMain text-white absolute -top-5 -right-1">
-                0
+                {likedMovies?.length || 0}
               </div>
               <FaHeart />
             </div>
