@@ -15,10 +15,10 @@ const rootReducer = combineReducers({
   adminDeleteUser: User.adminDeleteUserReducer,
 
   // category reducers
-  getCategories: Category.getCategoriesReducer,
+  getAllCategories: Category.getCategoriesReducer,
   adminAddcategory: Category.adminAddCategoryReducer,
   adminUpdateCategory: Category.adminUpdateCategoryReducer,
-  adminDeleteCategory: Category.adminDeleteCategoryReducer,
+  deleteCategoryAdmin: Category.adminDeleteCategoryReducer,
 });
 
 // getuserInfo from localStorage

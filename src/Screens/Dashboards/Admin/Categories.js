@@ -4,18 +4,34 @@ import Table2 from "../../../Components/Table2";
 import { HiPlusCircle } from "react-icons/hi";
 import CategoryModal from "../../../Components/Modals/CategoryModal";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategoryAction } from "../../../Redux/Actions/CategoryActons";
+import {
+  adminDeleteCategoryAction,
+  getCategoryAction,
+} from "../../../Redux/Actions/CategoryActions";
 import { Empty } from "../../../Components/Notifications/Empty";
 import Loader from "../../../Components/Notifications/Loader";
+import toast from "react-hot-toast";
 
 function Categories() {
   const [modalOpen, setModalOpen] = useState(false);
   const [category, setCategory] = useState();
   const dispatch = useDispatch();
 
-  const { categories, isLoading, isError } = useSelector(
-    (state) => state.getCategories
+  // get all categories
+  const { categories, isLoading } = useSelector(
+    (state) => state.getAllCategories
   );
+
+  // delete category
+  const { isError, isSuccess } = useSelector(
+    (state) => state.deleteCategoryAdmin
+  );
+
+  const adminDeleteCategory = (id) => {
+    if (window.confirm("Are you sure you want to delete this category?")) {
+      dispatch(adminDeleteCategoryAction(id));
+    }
+  };
 
   const onEditFunction = (id) => {
     setCategory(id);
@@ -24,10 +40,17 @@ function Categories() {
 
   useEffect(() => {
     dispatch(getCategoryAction());
+    if (isError) {
+      toast.error(isError);
+      dispatch({ type: "DELETE_CATEGORY_RESET" });
+    }
+    if (isSuccess) {
+      dispatch({ type: "DELETE_CATEGORY_RESET" });
+    }
     if (modalOpen === false) {
       setCategory();
     }
-  }, [modalOpen, dispatch]);
+  }, [modalOpen, dispatch, isError, isSuccess]);
 
   return (
     <SideBar>
@@ -53,6 +76,7 @@ function Categories() {
             data={categories}
             users={false}
             onEditFunction={onEditFunction}
+            onDeleteFunction={adminDeleteCategory}
           />
         ) : (
           <Empty message={"Your categories movies will appear here."} />
