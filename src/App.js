@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Aos from "aos";
 import { Route, Routes } from "react-router-dom";
 import HomeScreen from "./Screens/HomeScreen";
@@ -22,28 +22,35 @@ import ScrollOnTop from "./ScrollOnTop";
 import ToastContainer from "./Components/Notifications/ToastContainer";
 import SidebarProvider from "./Context/DrawerContext";
 import { AdminProtectedRoute, ProtectedRouter } from "./ProtectedRouter";
+import { useDispatch } from "react-redux";
+import { getCategoryAction } from "./Redux/Actions/CategoryActions";
 
 function App() {
   Aos.init();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCategoryAction());
+  }, [dispatch]);
   return (
     <>
       <ToastContainer />
       <SidebarProvider>
-      <ScrollOnTop>
-        <Routes>
-          {/* PUBLIC ROUTES */}
-          <Route path="/" element={<HomeScreen />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/movies" element={<MoviesPage />} />
-          <Route path="/movie/:id" element={<SingleMovie />} />
-          <Route path="/watch/:id" element={<WatchPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="*" element={<NotFound />} />
+        <ScrollOnTop>
+          <Routes>
+            {/* PUBLIC ROUTES */}
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/movies" element={<MoviesPage />} />
+            <Route path="/movies/:search" element={<MoviesPage />} />
+            <Route path="/movie/:id" element={<SingleMovie />} />
+            <Route path="/watch/:id" element={<WatchPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<NotFound />} />
 
-          {/* PRIVATE PUBLIC ROUTES */}
-          {/* <Route element={<ProtectedRouter />}> */}
+            {/* PRIVATE PUBLIC ROUTES */}
+            {/* <Route element={<ProtectedRouter />}> */}
             <Route path="/profile" element={<Profile />} />
             <Route path="/password" element={<Password />} />
             <Route path="/favorites" element={<FavoriteMovies />} />
@@ -56,9 +63,9 @@ function App() {
               <Route path="/addmovie" element={<AddMovies />} />
               <Route path="/users" element={<Users />} />
             </Route>
-          {/* </Route> */}
-        </Routes>
-      </ScrollOnTop>
+            {/* </Route> */}
+          </Routes>
+        </ScrollOnTop>
       </SidebarProvider>
     </>
   );
