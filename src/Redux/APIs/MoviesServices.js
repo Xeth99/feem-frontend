@@ -13,17 +13,40 @@ const getMoviesService = async ({
   pageNumber,
 }) => {
   const { data } = await Axios.get(`/movies`, {
-    params: { 
+    params: {
       category,
       time,
       language,
       rate,
       year,
       search,
-      pageNumber 
-    }
+      pageNumber,
+    },
   });
   return data;
 };
 
-export { getMoviesService };
+// get random movies API function
+const getRandomMoviesService = async () => {
+  const { data } = await Axios.get("/movies/random/all");
+  return data;
+};
+
+// get movie by id API function
+const getMovieByIdService = async (id) => {
+  const { data } = await Axios.get(`/movies/${id}`);
+  return data;
+};
+
+// get top rated movies API function
+const getTopRatedMoviesService = async () => {
+  const { data } = await Axios.get("/movies/rated/top");
+  return data;
+};
+
+export {
+  getMoviesService,
+  getRandomMoviesService,
+  getMovieByIdService,
+  getTopRatedMoviesService,
+};
