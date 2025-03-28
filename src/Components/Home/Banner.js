@@ -6,8 +6,12 @@ import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import Loader from "../Notifications/Loader";
 import { RiMovie2Line } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
 
 const Swipper = ({ sameClass, movies }) => {
+  const { isLoadng } = useSelector((state) => state.userLikeMovie);
+  const {userInfo} = useSelector((state) => state.userLogin);
+  const dispatch = useDispatch();
   return (
     <Swiper
       direction="vertical"

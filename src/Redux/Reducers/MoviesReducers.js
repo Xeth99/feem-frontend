@@ -69,3 +69,19 @@ export const moviesTopRatedReducer = (state = { movies: [] }, action) => {
       return state;
   }
 };
+
+// ADD MOVIE REVIEWS
+export const addMovieReviewReducer = (state = { review: [] }, action) => {
+  switch (action.type) {
+    case moviesConstants.ADD_MOVIE_REVIEW_REQUEST:
+      return { isLoading: true };
+    case moviesConstants.ADD_MOVIE_REVIEW_SUCCESS:
+      return { isLoading: false, isSuccess: true, review: action.payload };
+    case moviesConstants.ADD_MOVIE_REVIEW_FAIL:
+      return { isLoading: false, isError: action.payload };
+    case moviesConstants.ADD_MOVIE_REVIEW_RESET:
+      return {};
+    default:
+      return state;
+  }
+};

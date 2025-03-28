@@ -44,9 +44,20 @@ const getTopRatedMoviesService = async () => {
   return data;
 };
 
+// review movies API function
+const reviewMovieService = async (id, token, review) => {
+  const { data } = await Axios.post(`/movies/${id}/reviews`, review, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
+}
+
 export {
   getMoviesService,
   getRandomMoviesService,
   getMovieByIdService,
   getTopRatedMoviesService,
+  reviewMovieService,
 };

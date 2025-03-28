@@ -24,12 +24,14 @@ import SidebarProvider from "./Context/DrawerContext";
 import { AdminProtectedRoute, ProtectedRouter } from "./ProtectedRouter";
 import { useDispatch } from "react-redux";
 import { getCategoryAction } from "./Redux/Actions/CategoryActions";
+import { getMoviesAction } from "./Redux/Actions/MoviesActions";
 
 function App() {
   Aos.init();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCategoryAction());
+    dispatch(getMoviesAction({}));
   }, [dispatch]);
   return (
     <>

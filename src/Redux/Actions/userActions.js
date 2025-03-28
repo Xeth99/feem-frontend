@@ -121,6 +121,25 @@ const deleteFavoriteMoviesAction = () => async (dispatch, getState) => {
   }
 };
 
+// user likes movies action
+const userLikeMovieAction = (movieId) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: userConstants.LIKE_MOVIE_REQUEST });
+    const response = await userApi.likeMovieService(
+      movieId,
+      tokenProtection(getState)
+    );
+    dispatch({
+      type: userConstants.LIKE_MOVIE_SUCCESS,
+      payload: response,
+    });
+    toast.success("Movie added to favorites!");
+    dispatch(getFavoriteMoviesAction());
+  } catch (error) {
+    ErrorAction(error, dispatch, userConstants.LIKE_MOVIE_FAIL);
+  }
+};
+
 // admin get all users action
 const adminGetAllUsersAction = () => async (dispatch, getState) => {
   try {
@@ -162,4 +181,5 @@ export {
   deleteFavoriteMoviesAction,
   adminGetAllUsersAction,
   adminDeleteUserAction,
+  userLikeMovieAction,
 };

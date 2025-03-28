@@ -134,6 +134,21 @@ const deleteFavoriteMoviesService = async (token) => {
   }
 };
 
+// like movie API call
+const likeMovieService = async (movieId, token) => {
+  try {
+    const { data } = await Axios.post(`/users/favorites`, movieId, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error("Like Movie Error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 // ********** ADMIN APIs **********
 
 // Admin get all users API call
@@ -164,10 +179,7 @@ const deleteUserService = async (id, token) => {
     });
     return data;
   } catch (error) {
-    console.error(
-      "Delete User Error:",
-      error.response?.data || error.message
-    );
+    console.error("Delete User Error:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -182,4 +194,5 @@ export {
   deleteFavoriteMoviesService,
   getAllUsersService,
   deleteUserService,
+  likeMovieService,
 };
