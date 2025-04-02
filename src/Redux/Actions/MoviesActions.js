@@ -100,10 +100,42 @@ const addMovieReviewAction =
     }
   };
 
+// delete movie action
+const deleteMovieAction = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: MoviesConstants.DELETE_MOVIE_REQUEST });
+    await MoviesApi.deleteMovieService(id, tokenProtection(getState));
+    dispatch({
+      type: MoviesConstants.DELETE_MOVIE_SUCCESS,
+    });
+    toast.success("Movie deleted!");
+    dispatch(getMoviesAction({}));
+  } catch (error) {
+    ErrorAction(error, dispatch, MoviesConstants.DELETE_MOVIE_FAIL);
+  }
+};
+
+// delete all movies action
+const deleteAllMoviesAction = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: MoviesConstants.DELETE_ALL_MOVIES_REQUEST });
+    await MoviesApi.deleteAllMoviesService(tokenProtection(getState));
+    dispatch({
+      type: MoviesConstants.DELETE_ALL_MOVIES_SUCCESS,
+    });
+    toast.success("All movies deleted!");
+    dispatch(getMoviesAction({}));
+  } catch (error) {
+    ErrorAction(error, dispatch, MoviesConstants.DELETE_ALL_MOVIES_FAIL);
+  }
+};
+
 export {
   getMoviesAction,
   getMovieByIdAction,
   getTopRatedMoviesAction,
   getRandomMoviesAction,
   addMovieReviewAction,
+  deleteMovieAction,
+  deleteAllMoviesAction,
 };

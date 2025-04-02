@@ -7,11 +7,17 @@ import { FaHeart } from "react-icons/fa";
 import Loader from "../Notifications/Loader";
 import { RiMovie2Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
+import { IfMovieLiked, LikeMovie } from "../../Context/Functionalities";
 
 const Swipper = ({ sameClass, movies }) => {
   const { isLoadng } = useSelector((state) => state.userLikeMovie);
-  const {userInfo} = useSelector((state) => state.userLogin);
+  const { userInfo } = useSelector((state) => state.userLogin);
   const dispatch = useDispatch();
+
+  // if liked movies
+  const isLiked = (movie) => {
+    return IfMovieLiked(movie);
+  };
   return (
     <Swiper
       direction="vertical"
@@ -48,7 +54,13 @@ const Swipper = ({ sameClass, movies }) => {
               >
                 Watch
               </Link>
-              <button className="bg-white hover:text-subMain transitions text-white px-4 py-3 rounded text-sm bg-opacity-30">
+              <button
+                onClick={() => LikeMovie(movie, dispatch, userInfo)}
+                disabled={isLiked(movie) || isLoadng}
+                className={`bg-white ${
+                  isLiked(movie) ? "text-subMain" : "text-white"
+                } hover:text-subMain transitions  px-4 py-3 rounded text-sm bg-opacity-30`}
+              >
                 <FaHeart />
               </button>
             </div>

@@ -1,8 +1,9 @@
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import { userLikeMovieAction } from "../Redux/Actions/userActions";
 
 // check if movie is added to favorites
-const CheckFavorite = (movie) => {
+const IfMovieLiked = (movie) => {
   const { likedMovies } = useSelector((state) => state.userGetFavoriteMovies);
   return likedMovies?.find((likedMovie) => likedMovie?._id === movie?._id);
 };
@@ -14,4 +15,4 @@ const LikeMovie = (movie, dispatch, userInfo) => {
     : dispatch(userLikeMovieAction({ movieId: movie?._id }));
 };
 
-export { CheckFavorite, LikeMovie };
+export { IfMovieLiked, LikeMovie };
