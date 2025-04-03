@@ -52,7 +52,7 @@ const reviewMovieService = async (id, token, review) => {
     },
   });
   return data;
-}
+};
 
 // delete movie API function
 const deleteMovieService = async (id, token) => {
@@ -62,7 +62,7 @@ const deleteMovieService = async (id, token) => {
     },
   });
   return data;
-}
+};
 
 // delete all movies API function
 const deleteAllMoviesService = async (token) => {
@@ -72,7 +72,17 @@ const deleteAllMoviesService = async (token) => {
     },
   });
   return data;
-}
+};
+
+// create movie API function
+const addMovieService = async (movie, token) => {
+  const { data } = await Axios.post(`/movies`, movie, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
+};
 
 export {
   getMoviesService,
@@ -82,4 +92,5 @@ export {
   reviewMovieService,
   deleteMovieService,
   deleteAllMoviesService,
+  addMovieService,
 };
