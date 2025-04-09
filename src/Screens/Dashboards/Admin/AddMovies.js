@@ -26,7 +26,7 @@ function AddMovies() {
   const [imageTitle, setImageTitle] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const dispatch = useDispatch();
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   // use selector
   const { categories } = useSelector((state) => state.getAllCategories);
@@ -85,14 +85,14 @@ function AddMovies() {
       setImageWithoutTitle("");
       setVideoUrl("");
       dispatch({ type: "ADD_MOVIE_RESET" });
-      navigation("/addMovie");
+      navigate("/addMovie");
     }
     // if error then show error
     if (isError) {
       toast.error("Something went wrong!");
       dispatch({ type: "ADD_MOVIE_RESET" });
     }
-  }, [modalOpen, isSuccess, reset, navigation, isError, dispatch]);
+  }, [modalOpen, isSuccess, reset, navigate, isError, dispatch]);
 
   return (
     <SideBar>
@@ -159,7 +159,7 @@ function AddMovies() {
             <p className="text-border font-semibold text-sm">
               Image without Title
             </p>
-            <Uploader setImageUrl={setImageWithoutTitle} />
+            <Uploader setImageUrl={setImageWithoutTitle} value={imageWithoutTitle} />
             <ImagePreview image={imageWithoutTitle} name="imageWithoutTitle" />
           </div>
 

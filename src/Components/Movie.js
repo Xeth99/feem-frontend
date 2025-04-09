@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { IfMovieLiked, LikeMovie } from "../Context/Functionalities";
 
 function Movie({ movie }) {
-  const {isLoading } = useSelector((state) => state.userLikeMovie);
+  const { isLoading } = useSelector((state) => state.userLikeMovie);
   const { userInfo } = useSelector((state) => state.userLogin);
   const dispatch = useDispatch();
 
@@ -17,11 +17,7 @@ function Movie({ movie }) {
       <div className="border border-border p-1 hover:scale-95 transitions relative rounded overflow-hidden">
         <Link to={`/movie/${movie?._id}`} className="w-full">
           <img
-            src={
-              movie?.image
-                ? `/images/movies/${movie?.image}`
-                : `/images/logo.jpeg`
-            }
+            src={movie?.image ? movie?.image : `/images/logo.jpeg`}
             alt={movie?.name}
             className="w-full h-64 object-cover"
           />

@@ -54,11 +54,7 @@ const SwiperTop = ({ nextEl, prevEl, movies }) => {
         <SwiperSlide key={index}>
           <div className="p-4 h-rate hovered border border-border bg-dry rounded-lg overflow-hidden">
             <img
-              src={
-                movie?.titleImage
-                  ? `/images/movies/${movie?.titleImage}`
-                  : `/images/logo.jpeg`
-              }
+              src={movie?.titleImage ? movie?.titleImage : `/images/logo.jpeg`}
               alt={movie?.name}
               className="w-full h-full object-cover rounded-lg"
             />

@@ -16,6 +16,7 @@ import MoviesList from "./Screens/Dashboards/Admin/MoviesList";
 import Dashboard from "./Screens/Dashboards/Admin/Dashboard";
 import Categories from "./Screens/Dashboards/Admin/Categories";
 import AddMovies from "./Screens/Dashboards/Admin/AddMovies";
+import EditMovies from "./Screens/Dashboards/Admin/EditMovie";
 import Users from "./Screens/Dashboards/Admin/Users";
 import NotFound from "./Screens/NotFound";
 import ScrollOnTop from "./ScrollOnTop";
@@ -78,6 +79,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/categories" element={<Categories />} />
               <Route path="/addmovie" element={<AddMovies />} />
+              <Route path="/editmovie/:id" element={<EditMovies />} />
               <Route path="/users" element={<Users />} />
             </Route>
             {/* </Route> */}

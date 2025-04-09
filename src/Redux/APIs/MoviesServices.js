@@ -84,6 +84,16 @@ const addMovieService = async (movie, token) => {
   return data;
 };
 
+// update movie API function
+const updateMovieService = async (token, id, movie) => {
+  const { data } = await Axios.put(`/movies/${id}`, movie, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
+};
+
 export {
   getMoviesService,
   getRandomMoviesService,
@@ -93,4 +103,5 @@ export {
   deleteMovieService,
   deleteAllMoviesService,
   addMovieService,
+  updateMovieService,
 };

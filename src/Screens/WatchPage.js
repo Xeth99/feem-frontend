@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Layout from "../Layout/Layout";
 import { useParams, Link } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
@@ -7,12 +7,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMovieByIdAction } from "../Redux/Actions/MoviesActions";
 import Loader from "../Components/Notifications/Loader";
 import { RiMovie2Line } from "react-icons/ri";
-import { IfMovieLiked, LikeMovie } from "../Context/Functionalities";
+import {
+  DownloadMovie,
+  IfMovieLiked,
+  LikeMovie,
+} from "../Context/Functionalities";
+import FileSaver from "file-saver";
+import { SidebarContext } from "../Context/DrawerContext";
 
 function WatchPage() {
   let { id } = useParams();
   const dispatch = useDispatch();
   const [play, setPlay] = useState(false);
+  const { progress, setProgress } = useContext(SidebarContext);
   const sameClass = "flex gap-6 flex-colo min-h-screen";
   // use selector
   const { isLoading, isError, movie } = useSelector(
@@ -25,6 +32,14 @@ function WatchPage() {
 
   // if liked movies
   const isLiked = (movie) => IfMovieLiked(movie);
+
+  // download movie video
+  const DownloadMovieVideo = async (videoUrl, name) => {
+    await DownloadMovie(videoUrl, setProgress).then((data) => {
+      setProgress(0);
+      FileSaver.saveAs(data, name);
+    });
+  };
 
   useEffect(() => {
     dispatch(getMovieByIdAction(id));
@@ -51,7 +66,11 @@ function WatchPage() {
               >
                 <FaHeart />
               </button>
-              <button className="bg-subMain flex-rows gap-2 hover:text-main transitions text-white rounded px-8 font-medium py-3 text-sm">
+              <button
+                disabled={progress > 0 && progress < 100}
+                onClick={() => DownloadMovieVideo(movie?.video, movie?.name)}
+                className="bg-subMain flex-rows gap-2 hover:text-main transitions text-white rounded px-8 font-medium py-3 text-sm"
+              >
                 <FaCloudDownloadAlt /> Download
               </button>
             </div>
@@ -87,11 +106,7 @@ function WatchPage() {
                   </button>
                 </div>
                 <img
-                  src={
-                    movie?.image
-                      ? `/images/movies/${movie?.image}`
-                      : "images/logo.jpeg"
-                  }
+                  src={movie?.image ? movie?.image : "images/logo.jpeg"}
                   alt={movie?.name}
                   className="w-full h-full object-cover rounded-lg"
                 />

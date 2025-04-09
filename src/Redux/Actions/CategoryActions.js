@@ -26,6 +26,7 @@ const adminAddcategoryAction = (title) => async (dispatch, getState) => {
       type: CategoryConstants.ADD_CATEGORY_SUCCESS,
     });
     toast.success("Category created successfully!");
+    dispatch(getCategoryAction());
   } catch (error) {
     ErrorAction(error, dispatch, CategoryConstants.ADD_CATEGORY_FAIL);
   }

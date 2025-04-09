@@ -149,6 +149,27 @@ const addMovieAction = (movie) => async (dispatch, getState) => {
   }
 };
 
+// update movie action
+const updateMovieAction = (id, movie) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: MoviesConstants.UPDATE_MOVIE_REQUEST });
+    const response = await MoviesApi.updateMovieService(
+      tokenProtection(getState),
+      id,
+      movie
+    );
+    dispatch({
+      type: MoviesConstants.UPDATE_MOVIE_SUCCESS,
+      payload: response,
+    });
+    toast.success("Movie updated successfully!");
+    dispatch(getMovieByIdAction(id));
+    dispatch(deleteAllCastAction());
+  } catch (error) {
+    ErrorAction(error, dispatch, MoviesConstants.UPDATE_MOVIE_FAIL);
+  }
+};
+
 // ********* CASTS *********
 
 // add cast action
@@ -188,4 +209,5 @@ export {
   deleteCastAction,
   updateCastAction,
   deleteAllCastAction,
+  updateMovieAction,
 };

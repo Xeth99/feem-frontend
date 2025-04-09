@@ -32,6 +32,7 @@ function CategoryModal({ modalOpen, setModalOpen, category }) {
       } else {
         dispatch(adminAddcategoryAction({ title: title }));
         setTitle("");
+        setModalOpen(!modalOpen);
       }
     } else {
       toast.error("Category can't be empty");
