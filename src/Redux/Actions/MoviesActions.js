@@ -5,27 +5,11 @@ import toast from "react-hot-toast";
 
 // get all movies action
 const getMoviesAction =
-  ({
-    category = "",
-    time = "",
-    language = "",
-    rate = "",
-    year = "",
-    search = "",
-    pageNumber = "",
-  }) =>
+  () =>
   async (dispatch) => {
     try {
       dispatch({ type: MoviesConstants.MOVIES_LIST_REQUEST });
-      const response = await MoviesApi.getMoviesService({
-        category,
-        time,
-        language,
-        rate,
-        year,
-        search,
-        pageNumber,
-      });
+      const response = await MoviesApi.getMoviesService();
       dispatch({
         type: MoviesConstants.MOVIES_LIST_SUCCESS,
         payload: response,
@@ -109,7 +93,7 @@ const deleteMovieAction = (id) => async (dispatch, getState) => {
       type: MoviesConstants.DELETE_MOVIE_SUCCESS,
     });
     toast.success("Movie deleted!");
-    dispatch(getMoviesAction({}));
+    dispatch(getMoviesAction());
   } catch (error) {
     ErrorAction(error, dispatch, MoviesConstants.DELETE_MOVIE_FAIL);
   }
@@ -124,7 +108,7 @@ const deleteAllMoviesAction = () => async (dispatch, getState) => {
       type: MoviesConstants.DELETE_ALL_MOVIES_SUCCESS,
     });
     toast.success("All movies deleted!");
-    dispatch(getMoviesAction({}));
+    dispatch(getMoviesAction());
   } catch (error) {
     ErrorAction(error, dispatch, MoviesConstants.DELETE_ALL_MOVIES_FAIL);
   }

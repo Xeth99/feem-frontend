@@ -21,7 +21,7 @@ import Users from "./Screens/Dashboards/Admin/Users";
 import NotFound from "./Screens/NotFound";
 import ScrollOnTop from "./ScrollOnTop";
 import ToastContainer from "./Components/Notifications/ToastContainer";
-import SidebarProvider from "./Context/DrawerContext";
+import DrawerContext from "./Context/DrawerContext";
 import { AdminProtectedRoute, ProtectedRouter } from "./ProtectedRouter";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategoryAction } from "./Redux/Actions/CategoryActions";
@@ -37,22 +37,22 @@ function App() {
   const { isError: catError } = useSelector((state) => state.getAllCategories);
   useEffect(() => {
     dispatch(getCategoryAction());
-    dispatch(getMoviesAction({}));
+    dispatch(getMoviesAction());
     if (userInfo) {
       dispatch(getFavoriteMoviesAction());
     }
     if (isError || catError) {
       toast.error(isError || catError);
-      dispatch({type:"LIKE_MOVIES_RESET"})
+      dispatch({ type: "LIKE_MOVIES_RESET" });
     }
-    if(isSuccess){
-      dispatch({type:"LIKE_MOVIES_RESET"})
+    if (isSuccess) {
+      dispatch({ type: "LIKE_MOVIES_RESET" });
     }
   }, [dispatch, userInfo, isError, catError, isSuccess]);
   return (
     <>
       <ToastContainer />
-      <SidebarProvider>
+      <DrawerContext>
         <ScrollOnTop>
           <Routes>
             {/* PUBLIC ROUTES */}
@@ -85,7 +85,7 @@ function App() {
             {/* </Route> */}
           </Routes>
         </ScrollOnTop>
-      </SidebarProvider>
+      </DrawerContext>
     </>
   );
 }

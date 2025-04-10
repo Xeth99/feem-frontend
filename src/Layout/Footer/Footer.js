@@ -1,7 +1,44 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import {
+  LanguageData,
+  RatesData,
+  TimesData,
+  YearData,
+} from "../../Data/FiltersData";
 
 function Footer() {
+  const { search } = useParams();
+  const [category, setCategory] = useState({ title: "All Categories" });
+  const [year, setYear] = useState(YearData[0]);
+  const [times, setTimes] = useState(TimesData[0]);
+  const [rates, setRates] = useState(RatesData[0]);
+  const [language, setLaguage] = useState(LanguageData[0]);
+
+  const queries = useMemo(() => {
+    const query = {
+      category: category?.title === "All Categories" ? "" : category?.title,
+      time: times?.title.replace(/\D/g, ""),
+      language: language?.title === "Sort by Language" ? "" : language?.title,
+      rate: rates?.title.replace(/\D/g, ""),
+      year: year?.title.replace(/\D/g, ""),
+      search: search ? search : "",
+    };
+    return query;
+  }, [category, times, rates, language, year, search]);
+
+  const generateSearchLink = (newQueryParams) => {
+    const currentQuery = queries;
+    const mergedQuery = { ...currentQuery, ...newQueryParams };
+
+    const queryString = new URLSearchParams(
+      Object.entries(mergedQuery)
+        .filter(([_, value]) => value !== "")
+        .map(([key, value]) => [key, encodeURIComponent(value)])
+    ).toString();
+
+    return `/movies?${queryString}`;
+  };
   const Links = [
     {
       title: "Company",
@@ -27,21 +64,12 @@ function Footer() {
     {
       title: "Top Categories",
       links: [
-        {
-          name: "Action",
-          link: "#",
-        },
-        {
-          name: "Romantic",
-          link: "#",
-        },
-        {
-          name: "Drama",
-          link: "#",
-        },
+        { name: "Action", link: generateSearchLink({ category: "Action" }) },
+        { name: "Romance", link: generateSearchLink({ category: "Romance" }) },
+        { name: "Drama", link: generateSearchLink({ category: "Drama" }) },
         {
           name: "Historical",
-          link: "#",
+          link: generateSearchLink({ category: "Historical" }),
         },
       ],
     },
@@ -103,12 +131,12 @@ function Footer() {
             </Link>
             <p className="leading-7 text-sm text-border mt-3">
               <span>
-                lorem 196 Andrew Road, Suite 200, <br /> New York, NY 1007
+                Suite B1, Apo Resettlement, Apo. <br /> Abuja, Nigeria
               </span>
               <br />
-              <span>Tell: +234 908 7654 321</span>
+              <span>Tell: +234 9034 525 038</span>
               <br />
-              <span>Email: example@gmail.com</span>
+              <span>Email: emmanuelfemi01@gmail.com</span>
             </p>
           </div>
         </div>

@@ -9,19 +9,19 @@ import { SidebarContext } from "../../Context/DrawerContext";
 import { useSelector } from "react-redux";
 
 function MobileFooter() {
-  const { mobileDrawer, toggleDrawer } = useContext(SidebarContext) || {};
-  const active = "bg-white text-main";
+  const { mobileDrawer, toggleDrawer } = useContext(SidebarContext);
+  const { likedMovies } = useSelector((state) => state.userGetFavoriteMovies);
+  const { userInfo } = useSelector((state) => state.userLogin);
+  const active = "bg-white text-[#080A1A]";
   const inActive =
     "transitions text-2xl flex-colo hover:bg-white hover:text-main text-white rounded-md px-4 py-3";
 
   const Hover = ({ isActive }) =>
     isActive ? `${active} ${inActive}` : inActive;
 
-  const { likedMovies } = useSelector((state) => state.userGetFavoriteMovies);
-
   return (
     <>
-      <div className="flex flex-col h-full justify-between align-middle bg-white rounded cursor-pointer overflow-y-scroll flex-grow w-full">
+      <div className="flex-btn h-full  bg-white rounded cursor-pointer overflow-y-scroll flex-grow w-full">
         <MenuDrawer drawerOpen={mobileDrawer} toggleDrawer={toggleDrawer} />
       </div>
       <footer className="lg:hidden fixed z-50 bottom-0 w-full px-1">
@@ -37,7 +37,16 @@ function MobileFooter() {
               <FaHeart />
             </div>
           </NavLink>
-          <NavLink to="/login" className={Hover}>
+          <NavLink
+            to={
+              userInfo
+                ? userInfo?.isAdmin
+                  ? "/dashboard"
+                  : "/profile"
+                : "/login"
+            }
+            className={Hover}
+          >
             <FiUserCheck />
           </NavLink>
           <button onClick={toggleDrawer} className={inActive}>

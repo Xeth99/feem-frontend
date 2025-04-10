@@ -28,7 +28,7 @@ function MoviesPage() {
     "text-white py-2 px-4 rounded font-semibold border-2 border-subMain hover:bg-subMain";
 
   // all movies
-  const { isLoading, isError, movies, pages, page, totalMovies } = useSelector(
+  const { isLoading, isError, movies, pages, page } = useSelector(
     (state) => state.getAllMovies
   );
 

@@ -3,32 +3,14 @@ import Axios from "./Axios";
 // ********** PUBLIC APIs **********
 
 // Get all movies API function
-const getMoviesService = async ({
-  category,
-  time,
-  language,
-  rate,
-  year,
-  search,
-  pageNumber,
-}) => {
-  const { data } = await Axios.get(`/movies`, {
-    params: {
-      category,
-      time,
-      language,
-      rate,
-      year,
-      search,
-      pageNumber,
-    },
-  });
+const getMoviesService = async () => {
+  const { data } = await Axios.get(`/movies/tmdb/now_playing`);
   return data;
 };
 
 // get random movies API function
 const getRandomMoviesService = async () => {
-  const { data } = await Axios.get("/movies/random/all");
+  const { data } = await Axios.get("/movies/tmdb/popular");
   return data;
 };
 
@@ -40,7 +22,7 @@ const getMovieByIdService = async (id) => {
 
 // get top rated movies API function
 const getTopRatedMoviesService = async () => {
-  const { data } = await Axios.get("/movies/rated/top");
+  const { data } = await Axios.get("/movies/tmdb/popular");
   return data;
 };
 

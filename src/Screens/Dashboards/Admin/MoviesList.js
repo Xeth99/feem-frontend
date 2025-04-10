@@ -44,7 +44,7 @@ function MoviesList() {
     "text-white p-2 rounded font-semibold border-2 border-subMain hover:bg-subMain";
 
   useEffect(() => {
-    dispatch(getMoviesAction({}));
+    dispatch(getMoviesAction());
     if (isError || deleteError || deleteAllError) {
       toast.error(isError || deleteError || deleteAllError);
     }
