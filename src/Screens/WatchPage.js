@@ -14,6 +14,7 @@ import {
 } from "../Context/Functionalities";
 import FileSaver from "file-saver";
 import { SidebarContext } from "../Context/DrawerContext";
+import ReactPlayer from "react-player";
 
 function WatchPage() {
   let { id } = useParams();
@@ -68,7 +69,9 @@ function WatchPage() {
               </button>
               <button
                 disabled={progress > 0 && progress < 100}
-                onClick={() => DownloadMovieVideo(movie?.video, movie?.name)}
+                onClick={() =>
+                  DownloadMovieVideo(movie?.trailerUrl, movie?.name)
+                }
                 className="bg-subMain flex-rows gap-2 hover:text-main transitions text-white rounded px-8 font-medium py-3 text-sm"
               >
                 <FaCloudDownloadAlt /> Download
@@ -79,9 +82,16 @@ function WatchPage() {
 
         {/* watch video */}
         {play ? (
-          <video controls autoPlay={play} className="w-full h-full rounded">
-            <source src={movie?.video} type="video/mp4" title={movie?.name} />
-          </video>
+          <div className="w-full h-[500px] rounded overflow-hidden">
+          <ReactPlayer
+            url={movie?.trailerUrl}
+            playing
+            controls
+            width="100%"
+            height="100%"
+            className="rounded"
+          />
+        </div>
         ) : (
           <div className="w-full h-screen rounded-lg overflow-hidden relative">
             {isLoading ? (

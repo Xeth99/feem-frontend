@@ -9,16 +9,16 @@ function MovieInfo({ movie, setModalOpen, DownloadMovieVideo, progress }) {
   return (
     <div className="w-full xl:h-screen relative text-white">
       <img
-        src={movie?.backdrop_path ? movie?.backdrop_path : `/images/logo.jpeg`}
-        alt={movie?.title}
+        src={movie?.bgImage ? movie?.bgImage : `/images/logo.jpeg`}
+        alt={movie?.name}
         className="w-full hidden xl:inline-block h-full object-cover"
       />
       <div className="xl:bg-main bg-dry flex-colo xl:bg-opacity-90 xl:absolute top-0 left-0 right-0 bottom-0">
         <div className="container px-3 mx-auto 2xl:px-32 xl:grid grid-cols-3 flex-colo py-10 lg:py-20 gap-8">
           <div className="xl:col-span-1 w-full xl:order-none order-last h-header bg-dry border border-gray-800 rounded-lg overflow-hidden">
             <img
-              src={movie?.poster_path ? movie?.poster_path : "/images/logo.jpeg"}
-              alt={movie?.title}
+              src={movie?.image ? movie?.image : "/images/logo.jpeg"}
+              alt={movie?.name}
               className="w-full h-full object-cover"
             />
           </div>
@@ -26,7 +26,7 @@ function MovieInfo({ movie, setModalOpen, DownloadMovieVideo, progress }) {
             <div className="col-span-3 flex flex-col gap-10">
               {/* {Title} */}
               <h1 className="xl:text-4xl capitalize font-sans text-2xl font-bold">
-                {movie.title}
+                {movie.name}
               </h1>
               {/* flex items */}
               <div className="flex items-center gap-4 font-medium text-dryGray ">
@@ -74,7 +74,7 @@ function MovieInfo({ movie, setModalOpen, DownloadMovieVideo, progress }) {
             <div className="col-span-2 md:mt-0 mt-2 flex justify-end">
               <button
                 disabled={progress}
-                onClick={() => DownloadMovieVideo(movie?.video, movie?.title)}
+                onClick={() => DownloadMovieVideo(movie?.trailerUrl, movie?.name)}
                 className="md:w-1/4 w-full relative flex-colo bg-subMain hover:bg-transparent border-2 border-subMain transitions md:h-64 h-20 rounded font-medium "
               >
                 <div className="flex-rows gap-6 text-md uppercase tracking-widest absolute md:rotate-90">

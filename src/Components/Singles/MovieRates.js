@@ -75,10 +75,10 @@ function MovieRates({ movie }) {
           className="xl:col-span-2 w-full flex flex-col gap-8"
         >
           <h3 className="text-xl text-text font-semibold">
-            Review "{movie?.title}"
+            Review "{movie?.name}"
           </h3>
           <p className="text-sm leading-7 font-medium text-border">
-            Your review about <span className="font-bold">{movie?.title}</span>{" "}
+            Your review about <span className="font-bold">{movie?.name}</span>{" "}
             would be appreciated.
           </p>
           <div className="text-sm w-full">

@@ -16,7 +16,7 @@ const getRandomMoviesService = async () => {
 
 // get movie by id API function
 const getMovieByIdService = async (id) => {
-  const { data } = await Axios.get(`/movies/tmdb/movie/:id/with-video`);
+  const { data } = await Axios.get(`/movies/tmdb/movie/${id}/with-video`);
   return data;
 };
 

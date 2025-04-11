@@ -39,9 +39,27 @@ const getMovieByIdAction = (id) => async (dispatch) => {
   try {
     dispatch({ type: MoviesConstants.MOVIES_BY_ID_REQUEST });
     const response = await MoviesApi.getMovieByIdService(id);
+    const formatted = {
+      _id: response.id,
+      name: response.title || response.name,
+      image: response.poster_path
+        ? `https://image.tmdb.org/t/p/w500/${response.poster_path}`
+        : null,
+      bgImage: response.backdrop_path
+        ? `https://image.tmdb.org/t/p/w500/${response.backdrop_path}`
+        : null,
+      vote_average: response.vote_average,
+      vote_count: response.vote_count,
+      release_date: response.release_date,
+      overview: response.overview,
+      original_language: response.original_language,
+      genre: response.genres.map((genre) => genre.name),
+      homepage: response.homepage,
+      trailerUrl: response.trailerUrl,
+    };
     dispatch({
       type: MoviesConstants.MOVIES_BY_ID_SUCCESS,
-      payload: response,
+      payload: formatted,
     });
   } catch (error) {
     ErrorAction(error, dispatch, MoviesConstants.MOVIES_BY_ID_FAIL);
@@ -67,7 +85,6 @@ const getTopRatedMoviesAction = () => async (dispatch) => {
       release_date: movie.release_date,
       overview: movie.overview,
     }));
-    console.log("formatted", formatted);
     dispatch({
       type: MoviesConstants.MOVIES_TOP_RATED_SUCCESS,
       payload: formatted,
