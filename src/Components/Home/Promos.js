@@ -1,7 +1,9 @@
 import React from "react";
 import { FiUser } from "react-icons/fi";
+import { useSelector } from "react-redux";
 
 function Promos() {
+  const { users } = useSelector((state) => state.adminGetAllUsers);
   return (
     <div className="my-20 py-10 md:px-20 px-8 bg-dry">
       <div className="lg:grid lg:grid-cols-2 lg:gap-10 items-center">
@@ -22,7 +24,7 @@ function Promos() {
             </div>
             <div className="flex-rows gap-4 bg-black text-subMain px-6 py-3 rounded font-bold">
               <FiUser />
-              2K
+              {users ? (users?.length > 0 ? users?.length : 0) : "5K"}
             </div>
           </div>
         </div>

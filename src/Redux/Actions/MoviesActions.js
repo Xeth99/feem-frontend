@@ -4,20 +4,35 @@ import { ErrorAction, tokenProtection } from "../Reducers/Protection";
 import toast from "react-hot-toast";
 
 // get all movies action
-const getMoviesAction =
-  () =>
-  async (dispatch) => {
-    try {
-      dispatch({ type: MoviesConstants.MOVIES_LIST_REQUEST });
-      const response = await MoviesApi.getMoviesService();
-      dispatch({
-        type: MoviesConstants.MOVIES_LIST_SUCCESS,
-        payload: response,
-      });
-    } catch (error) {
-      ErrorAction(error, dispatch, MoviesConstants.MOVIES_LIST_FAIL);
-    }
-  };
+const getMoviesAction = () => async (dispatch) => {
+  try {
+    dispatch({ type: MoviesConstants.MOVIES_LIST_REQUEST });
+
+    const response = await MoviesApi.getMoviesService();
+
+    const formatted = response.results.map((movie) => ({
+      _id: movie.id,
+      name: movie.title || movie.name,
+      image: movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+        : null,
+      bgImage: movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`
+        : null,
+      vote_average: movie.vote_average,
+      release_date: movie.release_date,
+      overview: movie.overview,
+      original_language: movie.original_language,
+    }));
+
+    dispatch({
+      type: MoviesConstants.MOVIES_LIST_SUCCESS,
+      payload: formatted,
+    });
+  } catch (error) {
+    ErrorAction(error, dispatch, MoviesConstants.MOVIES_LIST_FAIL);
+  }
+};
 
 // get movie by id action
 const getMovieByIdAction = (id) => async (dispatch) => {
@@ -38,9 +53,24 @@ const getTopRatedMoviesAction = () => async (dispatch) => {
   try {
     dispatch({ type: MoviesConstants.MOVIES_TOP_RATED_REQUEST });
     const response = await MoviesApi.getTopRatedMoviesService();
+
+    const formatted = response.map((movie) => ({
+      _id: movie.id,
+      name: movie.title || movie.name,
+      image: movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+        : null,
+      bgImage: movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`
+        : null,
+      vote_average: movie.vote_average,
+      release_date: movie.release_date,
+      overview: movie.overview,
+    }));
+    console.log("formatted", formatted);
     dispatch({
       type: MoviesConstants.MOVIES_TOP_RATED_SUCCESS,
-      payload: response,
+      payload: formatted,
     });
   } catch (error) {
     ErrorAction(error, dispatch, MoviesConstants.MOVIES_TOP_RATED_FAIL);
@@ -52,9 +82,22 @@ const getRandomMoviesAction = () => async (dispatch) => {
   try {
     dispatch({ type: MoviesConstants.MOVIES_RANDOM_REQUEST });
     const response = await MoviesApi.getRandomMoviesService();
+    const formatted = response.map((movie) => ({
+      _id: movie.id,
+      name: movie.title || movie.name,
+      image: movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+        : null,
+      bgImage: movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`
+        : null,
+      vote_average: movie.vote_average,
+      release_date: movie.release_date,
+      overview: movie.overview,
+    }));
     dispatch({
       type: MoviesConstants.MOVIES_RANDOM_SUCCESS,
-      payload: response,
+      payload: formatted,
     });
   } catch (error) {
     ErrorAction(error, dispatch, MoviesConstants.MOVIES_RANDOM_FAIL);

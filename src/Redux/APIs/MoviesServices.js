@@ -16,13 +16,13 @@ const getRandomMoviesService = async () => {
 
 // get movie by id API function
 const getMovieByIdService = async (id) => {
-  const { data } = await Axios.get(`/movies/${id}`);
+  const { data } = await Axios.get(`/movies/tmdb/movie/:id/with-video`);
   return data;
 };
 
 // get top rated movies API function
 const getTopRatedMoviesService = async () => {
-  const { data } = await Axios.get("/movies/tmdb/popular");
+  const { data } = await Axios.get("/movies/tmdb/rated/top");
   return data;
 };
 
