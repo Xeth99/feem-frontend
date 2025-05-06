@@ -3,8 +3,15 @@ import Axios from "./Axios";
 // ********** PUBLIC APIs **********
 
 // Get all movies API function
-const getMoviesService = async () => {
-  const { data } = await Axios.get(`/movies/tmdb/now_playing`);
+const getMoviesService = async ({ language, region, page, with_genres }) => {
+  const { data } = await Axios.get(`/movies/tmdb/now_playing`, {
+    params: {
+      language,
+      region,
+      page,
+      with_genres,
+    },
+  });
   return data;
 };
 

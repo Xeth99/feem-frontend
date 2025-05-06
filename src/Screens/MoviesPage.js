@@ -12,18 +12,19 @@ import {
   LanguageData,
   RatesData,
   TimesData,
-  YearData,
+  generateYears,
+  fetchGenres,
 } from "../Data/FiltersData";
 import { useParams } from "react-router-dom";
 
 function MoviesPage() {
   const { search } = useParams();
   const dispatch = useDispatch();
-  const [category, setCategory] = useState({ title: "All Categories" });
-  const [year, setYear] = useState(YearData[0]);
+  const [category, setCategory] = useState(fetchGenres()[0]);
+  const [year, setYear] = useState(generateYears()[0]);
   const [times, setTimes] = useState(TimesData[0]);
   const [rates, setRates] = useState(RatesData[0]);
-  const [language, setLaguage] = useState(LanguageData[0]);
+  const [language, setLaguage] = useState(LanguageData()[0]);
   const sameClass =
     "text-white py-2 px-4 rounded font-semibold border-2 border-subMain hover:bg-subMain";
 

@@ -33,7 +33,7 @@ function HomeScreen() {
     // get random movies
     dispatch(getRandomMoviesAction());
     // get all movies
-    dispatch(getMoviesAction());
+    dispatch(getMoviesAction({}));
     // get top rated movies
     dispatch(getTopRatedMoviesAction());
     // errors

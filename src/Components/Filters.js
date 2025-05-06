@@ -1,11 +1,12 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { FaAngleDown, FaCheck } from "react-icons/fa";
 import {
-  YearData,
-  TimesData,
-  RatesData,
   LanguageData,
+  RatesData,
+  TimesData,
+  generateYears,
+  fetchGenres,
 } from "../Data/FiltersData.js";
 
 function Filters(props) {
@@ -23,35 +24,55 @@ function Filters(props) {
     setLaguage,
   } = props?.data;
 
+  const [languagesList, setLanguagesList] = useState(LanguageData());
+  const [YearData] = useState(generateYears());
+  const [genre, setGenre] = useState(fetchGenres());
+
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const res = await LanguageData(); 
+        const formatted = res.map((lang) => ({
+          title: lang.english_name || lang.name || lang.iso_639_1,
+        }));
+        setLanguagesList(formatted);
+      } catch (error) {
+        console.error("Error fetching languages:", error);
+        setLanguagesList([{ title: "Failed to load languages" }]);
+      }
+    };
+    fetchLanguages();
+  }, []);
+
   const Filter = [
     {
       value: category,
       onChange: setCategory,
       items:
-        categories?.length > 0
-          ? [{ title: "All Categories" }, ...categories]
+        genre?.length > 0
+          ? [{ title: genre }]
           : [{ title: "No category found!" }],
     },
     {
       value: language,
       onChange: setLaguage,
-      items: LanguageData,
+      items: languagesList,
     },
-    {
-      value: year,
-      onChange: setYear,
-      items: YearData,
-    },
-    {
-      value: times,
-      onChange: setTimes,
-      items: TimesData,
-    },
-    {
-      value: rates,
-      onChange: setRates,
-      items: RatesData,
-    },
+    // {
+    //   value: year,
+    //   onChange: setYear,
+    //   items: YearData,
+    // },
+    // {
+    //   value: times,
+    //   onChange: setTimes,
+    //   items: TimesData,
+    // },
+    // {
+    //   value: rates,
+    //   onChange: setRates,
+    //   items: RatesData,
+    // },
   ];
 
   return (
@@ -71,7 +92,7 @@ function Filters(props) {
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute z-10 mt-1 w-full bg-white border border-gray-800 text-dryGray rounded-md shadow-lg max-h-60 py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                {item.items.map((iterm, i) => (
+                {item.items.map((option, i) => (
                   <Listbox.Option
                     key={i}
                     className={({ active }) =>
@@ -79,7 +100,7 @@ function Filters(props) {
                         active ? "bg-subMain text-white" : "text-main"
                       }`
                     }
-                    value={iterm}
+                    value={option}
                   >
                     {({ selected }) => (
                       <>
@@ -88,7 +109,7 @@ function Filters(props) {
                             selected ? "font-semibold" : "font-normal"
                           }`}
                         >
-                          {iterm.title}
+                          {option.title}
                         </span>
                         {selected ? (
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3">

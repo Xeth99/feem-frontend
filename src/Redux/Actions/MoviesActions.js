@@ -4,11 +4,11 @@ import { ErrorAction, tokenProtection } from "../Reducers/Protection";
 import toast from "react-hot-toast";
 
 // get all movies action
-const getMoviesAction = () => async (dispatch) => {
+const getMoviesAction = (params = {}) => async (dispatch) => {
   try {
     dispatch({ type: MoviesConstants.MOVIES_LIST_REQUEST });
 
-    const response = await MoviesApi.getMoviesService();
+    const response = await MoviesApi.getMoviesService(params);
 
     const formatted = response.results.map((movie) => ({
       _id: movie.id,

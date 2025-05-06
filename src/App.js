@@ -28,6 +28,7 @@ import { getCategoryAction } from "./Redux/Actions/CategoryActions";
 import { getMoviesAction } from "./Redux/Actions/MoviesActions";
 import { getFavoriteMoviesAction } from "./Redux/Actions/userActions";
 import toast from "react-hot-toast";
+import InstallPrompt from "./Components/InstallPrompt";
 
 function App() {
   Aos.init();
@@ -37,7 +38,7 @@ function App() {
   const { isError: catError } = useSelector((state) => state.getAllCategories);
   useEffect(() => {
     dispatch(getCategoryAction());
-    dispatch(getMoviesAction());
+    dispatch(getMoviesAction({}));
     if (userInfo) {
       dispatch(getFavoriteMoviesAction());
     }
@@ -86,6 +87,7 @@ function App() {
           </Routes>
         </ScrollOnTop>
       </DrawerContext>
+      <InstallPrompt />
     </>
   );
 }

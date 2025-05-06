@@ -1,59 +1,19 @@
-export const LanguageData = [
-  { title: "Sort by Language" },
-  { title: "English" },
-  { title: "French" },
-  { title: "Hindi" },
-  { title: "Tamil" },
-  { title: "Telugu" },
-  { title: "Malayalam" },
-  { title: "Kannada" },
-  { title: "Bengali" },
-  { title: "Punjabi" },
-  { title: "Marathi" },
-  { title: "Gujarati" },
-  { title: "Odia" },
-  { title: "Urdu" },
-  { title: "Assamese" },
-  { title: "Rajasthani" },
-  { title: "Haryanvi" },
-  { title: "Bhojpuri" },
-  { title: "Kashmiri" },
-  { title: "Nepali" },
-  { title: "Sindhi" },
-  { title: "Konkani" },
-  { title: "Dogri" },
-  { title: "Manipuri" },
-  { title: "Khasi" },
-  { title: "Mizo" },
-  { title: "Garo" },
-  { title: "Kokborok" },
-  { title: "Naga" },
-  { title: "Maithili" },
-  { title: "Santali" },
-  { title: "Sanskrit" },
-  { title: "Khasi" },
-  { title: "Mizo" },
-  { title: "Garo" },
-  { title: "Kokborok" },
-  { title: "Naga" },
-  { title: "Maithili" },
-  { title: "Santali" },
-  { title: "Sanskrit" },
-  { title: "Khasi" },
-  { title: "Mizo" },
-  { title: "Garo" },
-  { title: "Kokborok" },
-  { title: "Naga" },
-  { title: "Maithili" },
-  { title: "Santali" },
-  { title: "Sanskrit" },
-  { title: "Khasi" },
-  { title: "Mizo" },
-  { title: "Garo" },
-  { title: "Kokborok" },
-  { title: "Naga" },
-  { title: "Maithili" },
-];
+import axios from "axios";
+
+// export const LanguageData = [
+//   { title: "Sort by Language", value: "" },
+//   { title: "English", value: "en" },
+//   { title: "French", value: "fr" },
+//   { title: "Spanish", value: "es" },
+// ];
+export const LanguageData = async () => {
+  const response = await axios.get(
+    `https://api.themoviedb.org/3/configuration/languages?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
+  );
+  return response.data;
+  
+};
+
 
 export const RatesData = [
   {
@@ -91,29 +51,23 @@ export const TimesData = [
 ];
 
 export const YearData = [
-  {
-    title: "Sort By year",
-  },
-  {
-    title: "2025",
-  },
-  {
-    title: "2024",
-  },
-  {
-    title: "2023",
-  },
-  { title: "2022" },
-  { title: "2021" },
-  { title: "2020" },
-  { title: "2019" },
-  { title: "2018" },
-  { title: "2017" },
-  { title: "2016" },
-  { title: "2015" },
-  { title: "2014" },
-  { title: "2013" },
-  { title: "2012" },
-  { title: "2011" },
-  { title: "2010" },
+  { title: "Sort by Year", value: "" },
+  { title: "2024", value: "2024" },
+  { title: "2023", value: "2023" },
 ];
+
+export const fetchGenres = async () => {
+  const response = await axios.get(
+    `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+  );
+  return response.data.genres; // returns an array like [{ id: 28, name: "Action" }]
+};
+
+export const generateYears = () => {
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let y = currentYear; y >= 1950; y--) {
+    years.push({ title: y.toString(), value: y.toString() });
+  }
+  return years;
+};
