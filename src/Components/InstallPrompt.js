@@ -11,6 +11,15 @@ const InstallPrompt = () => {
       setShowInstall(true);
     };
     window.addEventListener("beforeinstallprompt", handler);
+
+    const isIOS = /iphone|ipad|ipod/.test(
+      window.navigator.userAgent.toLowerCase()
+    );
+    const isInStandaloneMode =
+      "standalone" in window.navigator && window.navigator.standalone;
+    if (isIOS && !isInStandaloneMode) {
+      setShowInstall(true);
+    }
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
@@ -31,14 +40,34 @@ const InstallPrompt = () => {
 
   return (
     showInstall && (
-      <div className="fixed bottom-4 right-4 bg-white shadow-lg p-4 rounded-xl border">
-        <p className="mb-2">Want to install this app on your device?</p>
-        <button
-          onClick={handleInstallClick}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Install
-        </button>
+      <div className="fixed top-6 left-4 right-4 md:right-4 md:left-auto md:w-auto w-[90%] bg-white shadow-lg p-4 rounded-xl border z-[999]">
+        <div className="flex justify-between items-start">
+          <div className="flex-1">
+            {deferredPrompt ? (
+              <>
+                <p className="mb-2">Want to install Feem on your device?</p>
+                <button
+                  onClick={handleInstallClick}
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                >
+                  Install
+                </button>
+              </>
+            ) : (
+              <p className="text-sm">
+                To install Feem, tap the <strong>Share</strong> icon in Safari
+                and select <strong>"Add to Home Screen"</strong>.
+              </p>
+            )}
+          </div>
+          <button
+            onClick={() => setShowInstall(false)}
+            className="ml-4 text-gray-500 hover:text-gray-800 text-lg font-bold"
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </div>
       </div>
     )
   );
