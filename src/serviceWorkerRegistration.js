@@ -17,12 +17,11 @@ export function register(config) {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
       if (isLocalhost) {
         checkValidServiceWorker(swUrl, config);
-        navigator.serviceWorker.ready.then;
-        () => {
+        navigator.serviceWorker.ready.then(() => {
           console.log(
             "This web is being served cache-first by a service worker."
           );
-        };
+        });
       } else {
         registerValidSW(swUrl, config);
       }
