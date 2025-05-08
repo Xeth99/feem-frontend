@@ -65,7 +65,7 @@ const InstallPrompt = () => {
             className="ml-4 text-gray-500 hover:text-gray-800 text-lg font-bold"
             aria-label="Close"
           >
-            &times;
+            x
           </button>
         </div>
       </div>
