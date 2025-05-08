@@ -4,7 +4,6 @@ const FILES_TO_CACHE = [
   "/index.html",
   "/favicon.png",
   "/manifest.json",
-  "/logo192.png",
 ];
 
 // Install Service Worker and cache files

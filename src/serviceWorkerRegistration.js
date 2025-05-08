@@ -33,19 +33,26 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
-      if (!registration.installing) return;
+      const worker =
+        registration.installing || registration.waiting || registration.active;
 
-      registration.installing.onstatechange = () => {
-        if (registration.installing.state === "installed") {
-          if (navigator.serviceWorker.controller) {
-            console.info("[SW] Update available.");
-            config?.onUpdate?.(registration);
-          } else {
-            console.info("[SW] Content cached for offline use.");
-            config?.onSuccess?.(registration);
+      if (worker) {
+        worker.onstatechange = () => {
+          console.log("Service worker state:", worker.state);
+
+          if (worker.state === "installed") {
+            if (navigator.serviceWorker.controller) {
+              console.info("[SW] Update available.");
+              config?.onUpdate?.(registration);
+            } else {
+              console.info("[SW] Content cached for offline use.");
+              config?.onSuccess?.(registration);
+            }
           }
-        }
-      };
+        };
+      } else {
+        console.warn("[SW] No installing/waiting/active worker found.");
+      }
     })
     .catch((error) => {
       console.error("[SW] Registration failed:", error);
