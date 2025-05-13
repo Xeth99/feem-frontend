@@ -21,30 +21,32 @@ precacheAndRoute([
 ]);
 
 // Cache dynamic pages like timeline or movie feeds
-registerRoute(
-  ({ url }) => url.pathname.startsWith("/social-timeline/"),
-  new NetworkFirst({
-    cacheName: "dynamic-social-cache",
-    plugins: [
-      new CacheableResponsePlugin({ statuses: [0, 200] }),
-      new ExpirationPlugin({
-        maxEntries: 50,
-        maxAgeSeconds: 60 * 60, // 1 hour
-      }),
-    ],
-  })
-);
+// registerRoute(
+//   ({ url }) => url.pathname.startsWith("/social-timeline/"),
+//   new NetworkFirst({
+//     cacheName: "dynamic-social-cache",
+//     plugins: [
+//       new CacheableResponsePlugin({ statuses: [0, 200] }),
+//       new ExpirationPlugin({
+//         maxEntries: 50,
+//         maxAgeSeconds: 60 * 60, // 1 hour
+//       }),
+//     ],
+//   })
+// );
 
 // Cache API calls
 registerRoute(
-  ({ url }) => url.pathname.startsWith("/api/"),
+  ({ url }) =>
+    url.origin === "https://feem-backend.onrender.com" &&
+    url.pathname.startsWith("/movies/tmdb/"),
   new NetworkFirst({
-    cacheName: "api-cache",
+    cacheName: "movie-api-cache",
     plugins: [
       new CacheableResponsePlugin({ statuses: [0, 200] }),
       new ExpirationPlugin({
         maxEntries: 30,
-        maxAgeSeconds: 5 * 60, // 5 minutes
+        maxAgeSeconds: 10 * 60, // 10 minutes
       }),
     ],
   })
