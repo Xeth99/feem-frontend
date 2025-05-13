@@ -6,6 +6,7 @@ const InstallPrompt = () => {
 
   useEffect(() => {
     const handler = (e) => {
+      console.log("👍 beforeinstallprompt event fired");
       e.preventDefault();
       setDeferredPrompt(e);
       setShowInstall(true);
