@@ -21,7 +21,7 @@ function MobileFooter() {
 
   return (
     <>
-      <div className="flex-btn h-full  bg-white rounded cursor-pointer overflow-y-scroll flex-grow w-full overflow-x-hidden">
+      <div className="flex-btn h-full  bg-white rounded cursor-pointer overflow-y-scroll flex-grow w-full">
         <MenuDrawer drawerOpen={mobileDrawer} toggleDrawer={toggleDrawer} />
       </div>
       <footer className="lg:hidden fixed z-50 bottom-0 w-full px-1">
