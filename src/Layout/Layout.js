@@ -6,7 +6,7 @@ import MobileFooter from "./Footer/MobileFooter";
 function Layout({ children }) {
   return (
     <>
-      <div className="bg-main text-white">
+      <div className="bg-main text-white overflow-y-hidden overflow-x-hidden">
         <NavBar />
         {children}
         <Footer />
