@@ -1,62 +1,84 @@
-const CACHE_NAME = "v1-static-cache";
-const FILES_TO_CACHE = [
-  "/",
-  "/index.html",
-  "/favicon.png",
-  "/manifest.json",
-];
+// Import Workbox from CDN
+importScripts(
+  "https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js"
+);
 
-// Install Service Worker and cache files
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("[SW] Caching app shell");
-      return cache.addAll(FILES_TO_CACHE);
-    })
-  );
-  self.skipWaiting(); // Activate SW immediately after installation
-});
+// Destructure needed Workbox modules
+const { registerRoute, setDefaultHandler, setCatchHandler } = workbox.routing;
+const { NetworkFirst, StaleWhileRevalidate, CacheFirst } = workbox.strategies;
+const { CacheableResponsePlugin } = workbox.cacheableResponse;
+const { ExpirationPlugin } = workbox.expiration;
+const { precacheAndRoute } = workbox.precaching;
 
-// Activate Service Worker and clean old caches
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keyList) =>
-      Promise.all(
-        keyList.map((key) => {
-          if (key !== CACHE_NAME) {
-            console.log("[SW] Removing old cache:", key);
-            return caches.delete(key);
-          }
-        })
-      )
-    )
-  );
-  self.clients.claim(); // Take control of all clients immediately
-});
+// Define files to precache
+precacheAndRoute([
+  { url: "/", revision: null },
+  { url: "/index.html", revision: null },
+  { url: "/favicon.png", revision: null },
+  { url: "/manifest.json", revision: null },
+  { url: "/offline.html", revision: null },
+  { url: "/fallback-image.png", revision: null },
+]);
 
-// Fetch handler
-self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
+// Cache dynamic pages like timeline or movie feeds
+registerRoute(
+  ({ url }) => url.pathname.startsWith("/social-timeline/"),
+  new NetworkFirst({
+    cacheName: "dynamic-social-cache",
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 60 * 60, // 1 hour
+      }),
+    ],
+  })
+);
 
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      if (response) {
-        return response; // Cache hit
-      }
-      return fetch(event.request)
-        .then((networkResponse) => {
-          // Optionally cache new files
-          return caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, networkResponse.clone());
-            return networkResponse;
-          });
-        })
-        .catch(() => {
-          // Offline fallback logic (optional)
-          if (event.request.mode === "navigate") {
-            return caches.match("/index.html");
-          }
-        });
-    })
-  );
+// Cache API calls
+registerRoute(
+  ({ url }) => url.pathname.startsWith("/api/"),
+  new NetworkFirst({
+    cacheName: "api-cache",
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({
+        maxEntries: 30,
+        maxAgeSeconds: 5 * 60, // 5 minutes
+      }),
+    ],
+  })
+);
+
+// Cache images with a Cache First strategy
+registerRoute(
+  ({ request }) => request.destination === "image",
+  new CacheFirst({
+    cacheName: "image-cache",
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+      }),
+    ],
+  })
+);
+
+// Set default handler for all other requests
+setDefaultHandler(
+  new StaleWhileRevalidate({
+    cacheName: "default-cache",
+    plugins: [new CacheableResponsePlugin({ statuses: [0, 200] })],
+  })
+);
+
+// Catch handler for offline fallbacks
+setCatchHandler(async ({ event }) => {
+  if (event.request.destination === "document") {
+    return caches.match("/offline.html");
+  }
+  if (event.request.destination === "image") {
+    return caches.match("/fallback-image.png");
+  }
+  return Response.error(); // generic fallback
 });

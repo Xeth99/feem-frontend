@@ -1,6 +1,7 @@
 {
   "short_name": "Feem",
   "name": "Feem",
+  "description": "Feem - Movie download and streaming app",
   "icons": [
     {
       "src": "favicon.png",
