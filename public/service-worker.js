@@ -37,9 +37,7 @@ precacheAndRoute([
 
 // Cache API calls
 registerRoute(
-  ({ url }) =>
-    url.origin === "https://feem-backend.onrender.com" &&
-    url.pathname.startsWith("/movies/tmdb/"),
+  ({ url }) => url.pathname.startsWith("/movies/tmdb/"),
   new NetworkFirst({
     cacheName: "movie-api-cache",
     plugins: [
