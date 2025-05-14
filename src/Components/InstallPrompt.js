@@ -14,7 +14,8 @@ const InstallPrompt = () => {
     window.addEventListener("beforeinstallprompt", handler);
 
     const isIOS = /iphone|ipad|ipod/.test(
-      window.navigator.userAgent.toLowerCase()
+      window.navigator.userAgent.toLowerCase() ||
+        (navigator.userAgent.includes("Macintosh") && "ontouchend" in document)
     );
     const isInStandaloneMode =
       "standalone" in window.navigator && window.navigator.standalone;
@@ -47,12 +48,21 @@ const InstallPrompt = () => {
             {deferredPrompt ? (
               <>
                 <p className="mb-2">Want to install Feem on your device?</p>
-                <button
-                  onClick={handleInstallClick}
-                  className="bg-blue-600 text-white px-4 py-2 rounded"
-                >
-                  Install
-                </button>
+                {deferredPrompt ? (
+                  <button
+                    onClick={handleInstallClick}
+                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                  >
+                    Install
+                  </button>
+                ) : (
+                  <button
+                    disabled
+                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                  >
+                    Install not available yet!
+                  </button>
+                )}
               </>
             ) : (
               <p className="text-sm">
