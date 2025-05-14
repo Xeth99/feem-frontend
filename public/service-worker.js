@@ -2,9 +2,15 @@
 importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js"
 );
+self.addEventListener("message", (event) => {
+  if (event.data?.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
 if (workbox) {
   console.log("Yay! Workbox is loaded 🎉");
-  
+
   workbox.core.skipWaiting();
   workbox.core.clientsClaim();
 
