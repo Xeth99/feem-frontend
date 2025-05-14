@@ -44,18 +44,17 @@ function registerValidSW(swUrl, config) {
           if (worker.state === "installed") {
             if (navigator.serviceWorker.controller) {
               console.info("[SW] Update available.");
-
-              // ⚠️ Use confirm OR auto-reload
-              if (window.confirm("A new version is available. Reload now?")) {
-                window.location.reload();
-              }
-
+          
+              // Tell the waiting service worker to skip waiting
+              registration.waiting?.postMessage({ type: "SKIP_WAITING" });
+          
               config?.onUpdate?.(registration);
             } else {
               console.info("[SW] Content cached for offline use.");
               config?.onSuccess?.(registration);
             }
           }
+          
         };
       } else {
         console.warn("[SW] No installing/waiting/active worker found.");
@@ -98,3 +97,11 @@ export function unregister() {
       });
   }
 }
+
+// Reload the page when a new service worker activates
+navigator.serviceWorker.addEventListener("controllerchange", () => {
+  if (window.__SW_UPDATE_PENDING__) return;
+  window.__SW_UPDATE_PENDING__ = true;
+  window.location.reload();
+});
+
