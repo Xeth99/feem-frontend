@@ -3,6 +3,9 @@ importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js"
 );
 
+workbox.skipWaiting();
+workbox.clientsClaim();
+
 // Destructure needed Workbox modules
 const { registerRoute, setDefaultHandler, setCatchHandler } = workbox.routing;
 const { NetworkFirst, StaleWhileRevalidate, CacheFirst } = workbox.strategies;
@@ -20,20 +23,6 @@ precacheAndRoute([
   { url: "/fallback-image.png", revision: null },
 ]);
 
-// Cache dynamic pages like timeline or movie feeds
-// registerRoute(
-//   ({ url }) => url.pathname.startsWith("/social-timeline/"),
-//   new NetworkFirst({
-//     cacheName: "dynamic-social-cache",
-//     plugins: [
-//       new CacheableResponsePlugin({ statuses: [0, 200] }),
-//       new ExpirationPlugin({
-//         maxEntries: 50,
-//         maxAgeSeconds: 60 * 60, // 1 hour
-//       }),
-//     ],
-//   })
-// );
 
 // Cache API calls
 registerRoute(
@@ -82,3 +71,5 @@ setCatchHandler(async ({ event }) => {
   }
   return Response.error(); // generic fallback
 });
+
+workbox.precaching.cleanupOutdatedCaches();

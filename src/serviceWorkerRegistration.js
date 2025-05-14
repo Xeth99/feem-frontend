@@ -17,6 +17,7 @@ export function register(config) {
     window.addEventListener("load", () => {
       const swUrl = `${process.env.PUBLIC_URL || ""}/service-worker.js`;
       console.log("swUrl", swUrl);
+
       if (isLocalhost) {
         checkValidServiceWorker(swUrl, config);
         navigator.serviceWorker.ready.then(() => {
@@ -43,6 +44,12 @@ function registerValidSW(swUrl, config) {
           if (worker.state === "installed") {
             if (navigator.serviceWorker.controller) {
               console.info("[SW] Update available.");
+
+              // ⚠️ Use confirm OR auto-reload
+              if (window.confirm("A new version is available. Reload now?")) {
+                window.location.reload();
+              }
+
               config?.onUpdate?.(registration);
             } else {
               console.info("[SW] Content cached for offline use.");
