@@ -34,36 +34,30 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
-      const worker =
-        registration.installing || registration.waiting || registration.active;
-
-      if (worker) {
-        worker.onstatechange = () => {
-          console.log("Service worker state:", worker.state);
-
-          if (worker.state === "installed") {
-            if (navigator.serviceWorker.controller) {
-              console.info("[SW] Update available.");
-          
-              // Tell the waiting service worker to skip waiting
-              registration.waiting?.postMessage({ type: "SKIP_WAITING" });
-          
-              config?.onUpdate?.(registration);
-            } else {
-              console.info("[SW] Content cached for offline use.");
-              config?.onSuccess?.(registration);
-            }
-          }
-          
-        };
-      } else {
-        console.warn("[SW] No installing/waiting/active worker found.");
+      if (registration.waiting) {
+        registration.waiting.postMessage({ type: "SKIP_WAITING" });
       }
+
+      registration.onupdatefound = () => {
+        const installingWorker = registration.installing;
+        if (installingWorker) {
+          installingWorker.onstatechange = () => {
+            if (
+              installingWorker.state === "installed" &&
+              navigator.serviceWorker.controller
+            ) {
+              console.info("[SW] New content available. Reloading...");
+              window.location.reload();
+            }
+          };
+        }
+      };
     })
     .catch((error) => {
       console.error("[SW] Registration failed:", error);
     });
 }
+
 
 function checkValidServiceWorker(swUrl, config) {
   fetch(swUrl, { headers: { "Service-Worker": "script" } })
@@ -100,8 +94,7 @@ export function unregister() {
 
 // Reload the page when a new service worker activates
 navigator.serviceWorker.addEventListener("controllerchange", () => {
-  if (window.__SW_UPDATE_PENDING__) return;
-  window.__SW_UPDATE_PENDING__ = true;
   window.location.reload();
 });
+
 

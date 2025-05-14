@@ -1,4 +1,3 @@
-// Import Workbox from CDN
 importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js"
 );
@@ -83,3 +82,10 @@ if (workbox) {
 } else {
   console.error("Workbox could not be loaded. Check CDN or connection.");
 }
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
