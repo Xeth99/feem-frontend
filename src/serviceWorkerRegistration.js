@@ -34,25 +34,26 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
-      if (registration.waiting) {
-        registration.waiting.postMessage({ type: "SKIP_WAITING" });
-      }
-
-      registration.onupdatefound = () => {
-        const installingWorker = registration.installing;
-        if (installingWorker) {
-          installingWorker.onstatechange = () => {
-            if (
-              installingWorker.state === "installed" &&
-              navigator.serviceWorker.controller
-            ) {
-              console.info("[SW] New content available. Reloading...");
-              window.location.reload();
+      const worker = registration.installing || registration.waiting || registration.active;
+    
+      if (worker) {
+        worker.onstatechange = () => {
+          console.log("Service worker state:", worker.state);
+    
+          if (worker.state === "installed") {
+            if (navigator.serviceWorker.controller) {
+              console.info("[SW] Update available.");
+              config?.onUpdate?.(registration);
+            } else {
+              console.info("[SW] Content cached for offline use.");
+              config?.onSuccess?.(registration);
             }
-          };
-        }
-      };
-    })
+          }
+        };
+      } else {
+        console.warn("[SW] No installing/waiting/active worker found.");
+      }
+    })    
     .catch((error) => {
       console.error("[SW] Registration failed:", error);
     });
