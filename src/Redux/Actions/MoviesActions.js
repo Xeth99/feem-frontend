@@ -2,6 +2,7 @@ import * as MoviesConstants from "../Constants/MoviesConstants";
 import * as MoviesApi from "../APIs/MoviesServices";
 import { ErrorAction, tokenProtection } from "../Reducers/Protection";
 import toast from "react-hot-toast";
+import { fetchNowPlayingMovies } from "../../Data/FiltersData";
 
 // get all movies action
 const getMoviesAction = (params = {}) => async (dispatch) => {
@@ -118,6 +119,56 @@ const getRandomMoviesAction = () => async (dispatch) => {
     });
   } catch (error) {
     ErrorAction(error, dispatch, MoviesConstants.MOVIES_RANDOM_FAIL);
+  }
+};
+
+const updateFilters = (filters) => ({
+  type: MoviesConstants.UPDATE_FILTERS,
+  payload: filters
+});
+
+const applyFilters = () => ({
+  type: MoviesConstants.APPLY_FILTERS
+});
+
+const fetchFilteredMovies = (filters) => async (dispatch) => {
+  try {
+    dispatch({ type: MoviesConstants.MOVIES_LIST_REQUEST });
+    
+    // Convert genre to with_genres for API call
+    const apiParams = {
+      ...filters,
+      with_genres: filters.genre,
+      page: filters.page || 1
+    };
+    
+    const response = await MoviesApi.getMoviesService(apiParams);
+    
+    const formatted = response.results.map((movie) => ({
+      _id: movie.id,
+      name: movie.title || movie.name,
+      image: movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+        : null,
+      bgImage: movie.backdrop_path
+        ? `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`
+        : null,
+      vote_average: movie.vote_average,
+      release_date: movie.release_date,
+      overview: movie.overview,
+      original_language: movie.original_language,
+      genre_ids: movie.genre_ids.map((id) => id.toString()),
+    }));
+
+    dispatch({
+      type: MoviesConstants.MOVIES_LIST_SUCCESS,
+      payload: {
+        movies: formatted,
+        ...filters
+      }
+    });
+  } catch (error) {
+    ErrorAction(error, dispatch, MoviesConstants.MOVIES_LIST_FAIL);
   }
 };
 
@@ -254,4 +305,7 @@ export {
   updateCastAction,
   deleteAllCastAction,
   updateMovieAction,
+  updateFilters,
+  applyFilters,
+  fetchFilteredMovies,
 };

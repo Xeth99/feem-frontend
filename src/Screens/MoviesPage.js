@@ -8,23 +8,12 @@ import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
 import Loader from "../Components/Notifications/Loader";
 import { RiMovie2Line } from "react-icons/ri";
 import { getMoviesAction } from "../Redux/Actions/MoviesActions";
-import {
-  LanguageData,
-  RatesData,
-  TimesData,
-  generateYears,
-  fetchGenres,
-} from "../Data/FiltersData";
 import { useParams } from "react-router-dom";
+import {fetchNowPlayingMovies} from "../Data/FiltersData"
 
 function MoviesPage() {
   const { search } = useParams();
   const dispatch = useDispatch();
-  const [category, setCategory] = useState(fetchGenres()[0]);
-  const [year, setYear] = useState(generateYears()[0]);
-  const [times, setTimes] = useState(TimesData[0]);
-  const [rates, setRates] = useState(RatesData[0]);
-  const [language, setLaguage] = useState(LanguageData()[0]);
   const sameClass =
     "text-white py-2 px-4 rounded font-semibold border-2 border-subMain hover:bg-subMain";
 
@@ -36,54 +25,28 @@ function MoviesPage() {
   // get all categories
   const { categories } = useSelector((state) => state.getAllCategories);
 
-  // queries
-  const queries = useMemo(() => {
-    const query = {
-      category: category?.title === "All Categories" ? "" : category?.title,
-      time: times?.title.replace(/\D/g, ""),
-      language: language?.title === "Sort by Language" ? "" : language?.title,
-      rate: rates?.title.replace(/\D/g, ""),
-      year: year?.title.replace(/\D/g, ""),
-      search: search ? search : "",
-    };
-    return query;
-  }, [category, times, rates, language, year, search]);
-
   useEffect(() => {
     // errors
     if (isError) {
       toast.error(isError);
     }
     // get all movies
-    dispatch(getMoviesAction(queries));
-  }, [isError, dispatch, queries]);
+    fetchNowPlayingMovies()
+  
+  }, [isError, dispatch]);
 
   // pagination next and previous pages
   const nextPage = () => {
-    dispatch(getMoviesAction({ ...queries, pageNumber: page + 1 }));
+    dispatch(getMoviesAction({ pageNumber: page + 1 }));
   };
   const previousPage = () => {
-    dispatch(getMoviesAction({ ...queries, pageNumber: page - 1 }));
-  };
-
-  const datas = {
-    categories: categories,
-    category: category,
-    setCategory: setCategory,
-    year: year,
-    setYear: setYear,
-    times: times,
-    setTimes: setTimes,
-    rates: rates,
-    setRates: setRates,
-    language: language,
-    setLaguage: setLaguage,
+    dispatch(getMoviesAction({ pageNumber: page - 1 }));
   };
 
   return (
     <Layout>
       <div className="min-height-screen container mx-auto px-2 my-6">
-        <Filters data={datas} />
+        <Filters data={{}} />
         <p className="text-lg font-medium my-6">
           Total{" "}
           <span className="font-bold text-subMain">

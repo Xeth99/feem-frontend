@@ -1,44 +1,66 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-  LanguageData,
-  RatesData,
-  TimesData,
-  YearData,
-} from "../../Data/FiltersData";
+import { fetchNowPlayingMovies } from "../../Data/FiltersData";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 
 function Footer() {
   const { search } = useParams();
-  const [category, setCategory] = useState({ title: "All Categories" });
-  const [year, setYear] = useState(YearData[0]);
-  const [times, setTimes] = useState(TimesData[0]);
-  const [rates, setRates] = useState(RatesData[0]);
-  const [language, setLaguage] = useState(LanguageData[0]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [pages, setPages] = useState(1);
+  const [page, setPage] = useState(1);
 
-  const queries = useMemo(() => {
-    const query = {
-      category: category?.title === "All Categories" ? "" : category?.title,
-      time: times?.title.replace(/\D/g, ""),
-      language: language?.title === "Sort by Language" ? "" : language?.title,
-      rate: rates?.title.replace(/\D/g, ""),
-      year: year?.title.replace(/\D/g, ""),
-      search: search ? search : "",
-    };
-    return query;
-  }, [category, times, rates, language, year, search]);
+  const dispatch = useDispatch();
 
-  const generateSearchLink = (newQueryParams) => {
-    const currentQuery = queries;
-    const mergedQuery = { ...currentQuery, ...newQueryParams };
+  // const queries = useMemo(() => {
+  //   const query = {
+  //     language: language ? language : "",
+  //     with_genres: with_genres ? with_genres : "",
+  //     page: page ? page : "",
+  //     region: region ? region : "",
+  //     search: search ? search : "",
+  //   };
+  //   return query;
+  // }, [language, with_genres, page, region, search]);
 
-    const queryString = new URLSearchParams(
-      Object.entries(mergedQuery)
-        .filter(([_, value]) => value !== "")
-        .map(([key, value]) => [key, encodeURIComponent(value)])
-    ).toString();
+  // const generateSearchLink = (newQueryParams) => {
+  //   const currentQuery = queries;
+  //   const mergedQuery = { ...currentQuery, ...newQueryParams };
 
-    return `/movies?${queryString}`;
-  };
+  //   const queryString = new URLSearchParams(
+  //     Object.entries(mergedQuery)
+  //       .filter(([_, value]) => value !== "")
+  //       .map(([key, value]) => [key, encodeURIComponent(value)])
+  //   ).toString();
+
+  //   return `/movies?${queryString}`;
+  // };
+
+   useEffect(() => {
+    // errors
+    if (isError) {
+      toast.error(isError);
+    }
+    // get all movies
+    fetchNowPlayingMovies()
+  
+  }, [isError, dispatch]);
+
+  // useEffect(() => {
+  //   // errors
+  //   if (isError) {
+  //     toast.error(isError);
+  //   }
+  //   // get all movies
+  //   fetchNowPlayingMovies()
+  // }, [isError, dispatch, queries]);
+
+  useEffect(() => {
+    // get all movies
+    fetchNowPlayingMovies();
+  }, []);
   const Links = [
     {
       title: "Company",
@@ -64,12 +86,11 @@ function Footer() {
     {
       title: "Top Categories",
       links: [
-        { name: "Action", link: generateSearchLink({ category: "Action" }) },
-        { name: "Romance", link: generateSearchLink({ category: "Romance" }) },
-        { name: "Drama", link: generateSearchLink({ category: "Drama" }) },
+        { name: "Action" },
+        { name: "Romance" },
+        { name: "Drama" },
         {
           name: "Historical",
-          link: generateSearchLink({ category: "Historical" }),
         },
       ],
     },

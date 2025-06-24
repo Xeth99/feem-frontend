@@ -33,6 +33,17 @@ const getTopRatedMoviesService = async () => {
   return data;
 };
 
+// get movie genre
+const getMovieGenre = async () => {
+  const { data } = await Axios.get("movies/tmdb/genre/movie/list");
+  return data;
+};
+
+const getMoviesLanguages = async () => {
+  const { data } = await Axios.get("/movies/configuration/languages");
+  return data;
+};
+
 // review movies API function
 const reviewMovieService = async (id, token, review) => {
   const { data } = await Axios.post(`/movies/${id}/reviews`, review, {
@@ -93,4 +104,6 @@ export {
   deleteAllMoviesService,
   addMovieService,
   updateMovieService,
+  getMoviesLanguages,
+  getMovieGenre,
 };
