@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { fetchNowPlayingMovies } from "../../Data/FiltersData";
+// import { fetchNowPlayingMovies } from "../../Data/FiltersData";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -44,7 +44,7 @@ function Footer() {
       toast.error(isError);
     }
     // get all movies
-    fetchNowPlayingMovies()
+    // fetchNowPlayingMovies()
   
   }, [isError, dispatch]);
 
@@ -59,7 +59,7 @@ function Footer() {
 
   useEffect(() => {
     // get all movies
-    fetchNowPlayingMovies();
+    // fetchNowPlayingMovies();
   }, []);
   const Links = [
     {

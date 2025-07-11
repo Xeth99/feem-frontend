@@ -1,6 +1,41 @@
 import * as moviesConstants from "../Constants/MoviesConstants";
 
 // GET ALL MOVIES
+const initialState = {
+  movies: [],
+  pages: 1,
+  page: 1,
+  filters: {},
+  isLoading: false,
+  isError: null,
+};
+export const moviesReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case moviesConstants.MOVIES_LIST_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        filters: action.payload || {},
+      };
+    case moviesConstants.MOVIES_LIST_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        movies: action.payload.movies,
+        pages: action.payload.total_results,
+        page: action.payload.total_pages,
+        filters: action.payload.filters,
+      };
+    case moviesConstants.MOVIES_LIST_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        isError: action.payload,
+      };
+    default:
+      return state;
+  }
+};
 export const moviesListReducer = (
   state = {
     movies: [],

@@ -2,7 +2,6 @@ import * as MoviesConstants from "../Constants/MoviesConstants";
 import * as MoviesApi from "../APIs/MoviesServices";
 import { ErrorAction, tokenProtection } from "../Reducers/Protection";
 import toast from "react-hot-toast";
-import { fetchNowPlayingMovies } from "../../Data/FiltersData";
 
 // get all movies action
 const getMoviesAction = (params = {}) => async (dispatch) => {

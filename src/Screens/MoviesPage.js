@@ -1,15 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 import Layout from "../Layout/Layout";
 import Filters from "../Components/Filters";
 import Movie from "../Components/Movie";
 import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
 import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
 import Loader from "../Components/Notifications/Loader";
 import { RiMovie2Line } from "react-icons/ri";
 import { getMoviesAction } from "../Redux/Actions/MoviesActions";
 import { useParams } from "react-router-dom";
-import {fetchNowPlayingMovies} from "../Data/FiltersData"
+import toast from "react-hot-toast";
 
 
 function MoviesPage() {
@@ -19,12 +18,9 @@ function MoviesPage() {
     "text-white py-2 px-4 rounded font-semibold border-2 border-subMain hover:bg-subMain";
 
   // all movies
-  const { isLoading, isError, movies, pages, page } = useSelector(
+  const { isLoading, isError, movies, pages, page, filters } = useSelector(
     (state) => state.getAllMovies
   );
-
-  // get all categories
-  const { categories } = useSelector((state) => state.getAllCategories);
 
   useEffect(() => {
     // errors
@@ -32,26 +28,34 @@ function MoviesPage() {
       toast.error(isError);
     }
     // get all movies
-    fetchNowPlayingMovies()
+    dispatch(getMoviesAction(filters));
   
   }, [isError, dispatch]);
 
   // pagination next and previous pages
   const nextPage = () => {
-    dispatch(getMoviesAction({ pageNumber: page + 1 }));
+    dispatch(getMoviesAction({ ...filters, page: page + 1 }));
   };
+  
   const previousPage = () => {
-    dispatch(getMoviesAction({ pageNumber: page - 1 }));
+    dispatch(getMoviesAction({ ...filters, page: page - 1 }));
   };
+
+  const filteredMovies = search 
+  ? movies.filter(movie => 
+      movie.name.toLowerCase().includes(search.toLowerCase())
+    )
+  : movies;
 
   return (
     <Layout>
       <div className="min-height-screen container mx-auto px-2 my-6">
-        <Filters data={{}} />
+        {/* <Filters data={{movie}} /> */}
+        <Filters />
         <p className="text-lg font-medium my-6">
           Total{" "}
           <span className="font-bold text-subMain">
-            {movies ? movies?.length : 0}
+            {filteredMovies ? filteredMovies?.length : 0}
           </span>{" "}
           items Found {search && `for "${search}"`}
         </p>
@@ -59,10 +63,10 @@ function MoviesPage() {
           <div className="w-full gap-6 flex-colo min-h-screen">
             <Loader />
           </div>
-        ) : movies?.length > 0 ? (
+        ) : filteredMovies?.length > 0 ? (
           <>
             <div className="grid sm:mt-10 mt-6 xl:grid-cols-4 zxl:grid-cols-5 lg:grid-cols-3 sm:grid-cols-2 gap-6">
-              {movies.map((movie, index) => (
+              {filteredMovies.map((movie, index) => (
                 <Movie key={index} movie={movie} />
               ))}
             </div>
