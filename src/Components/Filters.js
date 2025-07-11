@@ -1,11 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { FaAngleDown, FaCheck } from "react-icons/fa";
-// import {
-//   fetchGenres,
-//   fetchLanguages,
-//   generateYears,
-// } from "../Data/FiltersData";
 import { getMoviesAction } from "../Redux/Actions/MoviesActions";
 import { useDispatch, useSelector } from "react-redux";
 
