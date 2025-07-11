@@ -11,6 +11,7 @@ import { getMoviesAction } from "../Redux/Actions/MoviesActions";
 import { useParams } from "react-router-dom";
 import {fetchNowPlayingMovies} from "../Data/FiltersData"
 
+
 function MoviesPage() {
   const { search } = useParams();
   const dispatch = useDispatch();

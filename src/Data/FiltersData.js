@@ -1,5 +1,8 @@
 import axios from "axios";
 
+console.log("API URL:", process.env.REACT_APP_TMDB_API_URL)
+console.log("API KEY:", process.env.REACT_APP_TMDB_API_KEY)
+
 export const fetchNowPlayingMovies = async (params = {}) => {
   try {
     const { language, region, page, with_genres } = params;
