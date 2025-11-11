@@ -12,7 +12,7 @@ function MobileFooter() {
   const { mobileDrawer, toggleDrawer } = useContext(SidebarContext);
   const { likedMovies } = useSelector((state) => state.userGetFavoriteMovies);
   const { userInfo } = useSelector((state) => state.userLogin);
-  const active = "bg-white text-[#080A1A]";
+  const active = "bg-subMain text-[#080A1A]";
   const inActive =
     "transitions text-2xl flex-colo hover:bg-white hover:text-main text-white rounded-md px-4 py-3";
 
@@ -29,7 +29,14 @@ function MobileFooter() {
           <NavLink to="/movies" className={Hover}>
             <BsCollectionPlay />
           </NavLink>
-          <NavLink to={userInfo ? "/favorites" : "/login"} className={Hover}>
+          <NavLink
+            to={userInfo ? "/favorites" : "/login"}
+            className={({ isActive, to }) =>
+              isActive && to === "/favorites"
+                ? `${active} ${inActive}`
+                : inActive
+            }
+          >
             <div className="relative">
               <div className="w-5 h-5 flex-colo rounded-full text-xs bg-subMain text-white absolute -top-5 -right-1">
                 {likedMovies?.length || 0}

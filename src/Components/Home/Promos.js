@@ -12,11 +12,9 @@ function Promos() {
             Download Your Movies and Watch offline. <br /> Enjoy on Your Mobile
           </h1>
           <p className="text-text text-sm xl:text-base leading-6 xl:leading-8 ">
-            Lorem ipsum dolor uytrhf pooyet, uyttvvhbcvdgdbxnjnx ytwredf Lorem
-            ipsum dolor uytrhf pooyet, uyttvvhbcvdgdbxnjnx ytwredf Lorem ipsum
-            dolor uytrhf pooyet, uyttvvhbcvdgdbxnjnx ytwredf Lorem ipsum dolor
-            uytrhf pooyet, uyttvvhbcvdgdbxnjnx ytwredf Lorem ipsum dolor uytrhf
-            pooyet, uyttvvhbcvdgdbxnjnx ytwredf...
+            Get the best movies and TV shows on your phone. Watch movies and TV
+            shows offline and on the go with your friends and family. Download
+            the app to get started.
           </p>
           <div className="flex gap-4 md:text-lg text-sm">
             <div className="flex-colo bg-black text-subMain px-6 py-3 rounded font-bold">

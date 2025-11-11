@@ -10,7 +10,6 @@ import { getMoviesAction } from "../Redux/Actions/MoviesActions";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
-
 function MoviesPage() {
   const { search } = useParams();
   const dispatch = useDispatch();
@@ -18,34 +17,73 @@ function MoviesPage() {
     "text-white py-2 px-4 rounded font-semibold border-2 border-subMain hover:bg-subMain";
 
   // all movies
-  const { isLoading, isError, movies, pages, page, filters } = useSelector(
-    (state) => state.getAllMovies
-  );
+  const {
+    isLoading,
+    isError,
+    movies = [],
+    pages = 1,
+    page = 1,
+    filters = {},
+  } = useSelector((state) => state.getAllMovies);
+
+  useEffect(() => {
+    const queryParams = {
+      language: filters?.language || "en-US",
+      region: filters?.region || "US",
+      page,
+      with_genres: filters?.with_genres || "",
+    };
+    dispatch(getMoviesAction(queryParams));
+    // get all movies
+    // dispatch(getMoviesAction(filters || {}));
+    // dispatch(getMoviesAction({  page }));
+  }, [
+    dispatch,
+    page,
+    filters?.with_genres,
+    filters?.language,
+    filters?.region,
+  ]);
 
   useEffect(() => {
     // errors
     if (isError) {
       toast.error(isError);
     }
-    // get all movies
-    dispatch(getMoviesAction(filters));
-  
-  }, [isError, dispatch]);
+  }, [isError]);
 
   // pagination next and previous pages
   const nextPage = () => {
-    dispatch(getMoviesAction({ ...filters, page: page + 1 }));
-  };
-  
-  const previousPage = () => {
-    dispatch(getMoviesAction({ ...filters, page: page - 1 }));
+    if (page < pages) {
+      dispatch(getMoviesAction({ ...filters, page: page + 1 }));
+    }
   };
 
-  const filteredMovies = search 
-  ? movies.filter(movie => 
-      movie.name.toLowerCase().includes(search.toLowerCase())
-    )
-  : movies;
+  const previousPage = () => {
+    if (page > 1) {
+      dispatch(getMoviesAction({ ...filters, page: page - 1 }));
+    }
+  };
+
+  // const filteredMovies = search
+  //   ? movies.filter((movie) =>
+  //       movie.name.toLowerCase().includes(search.toLowerCase())
+  //     )
+  //   : movies;
+  const filteredMovies = search
+    ? movies.filter((movie) => {
+        const titleMatch = movie?.name
+          ?.toLowerCase()
+          .includes(search.toLowerCase());
+        const languageMatch = movie?.original_language
+          ?.toLowerCase()
+          .includes(search.toLowerCase());
+        const dateMatch = movie?.release_date
+          ?.toLowerCase()
+          .includes(search.toLowerCase());
+        return titleMatch || languageMatch || dateMatch;
+      })
+    : movies;
 
   return (
     <Layout>

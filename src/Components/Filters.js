@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { FaAngleDown, FaCheck } from "react-icons/fa";
 import { getMoviesAction } from "../Redux/Actions/MoviesActions";
@@ -15,7 +15,7 @@ function Filters() {
 
   // Initialize selected values from Redux state
   const [selectedGenre, setSelectedGenre] = useState(
-    filters.with_genres ? { title: filters.with_genres, value: filters.with_genres } : null
+    filters.genre ? { title: filters.genre, value: filters.genre } : null
   );
   const [selectedLanguage, setSelectedLanguage] = useState(
     filters.language ? { title: filters.language, value: filters.language } : null
@@ -49,32 +49,41 @@ function Filters() {
   }, []);
 
   // Handle filter changes
-  useEffect(() => {
+  const handleFilterChange = useCallback(() => {
     const newFilters = {
-      ...filters,
-      with_genres: selectedGenre?.value || "",
-      language: selectedLanguage?.value || "",
-      year: selectedYear?.value || "",
-      page: 1 // Reset to first page when filters change
+      genre: selectedGenre?.value || null,
+      language: selectedLanguage?.value || null,
+      year: selectedYear?.value || null,
+      page: 1
     };
     
-    // Dispatch the action to fetch movies with these filters
     dispatch(getMoviesAction(newFilters));
   }, [selectedGenre, selectedLanguage, selectedYear, dispatch]);
+
+  // Apply filters when they change
+  useEffect(() => {
+    handleFilterChange();
+  }, [selectedGenre, selectedLanguage, selectedYear, handleFilterChange]);
 
   const filterOptions = [
     {
       title: "Genre",
       value: selectedGenre,
       onChange: setSelectedGenre,
-      items: genreList.map((g) => ({ title: g.name, value: g.id })),
+      items: genreList.map((g) => ({ 
+        title: g.name, 
+        value: g.id 
+      })),
       defaultTitle: "Select Genre",
     },
     {
       title: "Language",
       value: selectedLanguage,
       onChange: setSelectedLanguage,
-      items: languagesList.map((l) => ({ title: l.english_name, value: l.iso_639_1 })),
+      items: languagesList.map((l) => ({ 
+        title: l.english_name || l.name, 
+        value: l.iso_639_1 || l.code 
+      })),
       defaultTitle: "Select Language",
     },
     {

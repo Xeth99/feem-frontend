@@ -5,11 +5,17 @@ const initialState = {
   movies: [],
   pages: 1,
   page: 1,
-  filters: {},
+  filters: {
+    // Add default filters
+    language: "",
+    genre: "",
+    year: "",
+    page: 1,
+  },
   isLoading: false,
   isError: null,
 };
-export const moviesReducer = (state = initialState, action) => {
+export const moviesListReducer = (state = initialState, action) => {
   switch (action.type) {
     case moviesConstants.MOVIES_LIST_REQUEST:
       return {
@@ -22,9 +28,10 @@ export const moviesReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         movies: action.payload.movies,
-        pages: action.payload.total_results,
-        page: action.payload.total_pages,
-        filters: action.payload.filters,
+        pages: action.payload.total_pages,
+        page: action.payload.page,
+        // filters: action.payload.filters,
+        filters: state.filters,
       };
     case moviesConstants.MOVIES_LIST_FAIL:
       return {
@@ -36,100 +43,101 @@ export const moviesReducer = (state = initialState, action) => {
       return state;
   }
 };
-export const moviesListReducer = (
-  state = {
-    movies: [],
-    filteredMovies: [],
-    filters: {
-      language: "",
-      genre: "", // Changed from with_genres to match component
-      year: "",
-      page: 1,
-    },
-    isLoading: false,
-    isError: null
-  },
-  action
-) => {
-  switch (action.type) {
-    case moviesConstants.MOVIES_LIST_REQUEST:
-      return { ...state, isLoading: true, isError: null };
+// export const moviesListReducer = (
+//   state = {
+//     movies: [],
+//     filteredMovies: [],
+//     filters: {
+//       language: "",
+//       genre: "", // Changed from with_genres to match component
+//       year: "",
+//       page: 1,
+//     },
+//     isLoading: false,
+//     isError: null
+//   },
+//   action
+// ) => {
+//   switch (action.type) {
+//     case moviesConstants.MOVIES_LIST_REQUEST:
+//       return { ...state, isLoading: true, isError: null };
 
-    case moviesConstants.MOVIES_LIST_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        movies: action.payload.movies || action.payload,
-        filteredMovies: action.payload.movies || action.payload,
-        filters: {
-          ...state.filters,
-          ...(action.payload.language && { language: action.payload.language }),
-          ...(action.payload.genre && { genre: action.payload.genre }),
-          ...(action.payload.year && { year: action.payload.year }),
-          ...(action.payload.page && { page: action.payload.page }),
-        }
-      };
+//     case moviesConstants.MOVIES_LIST_SUCCESS:
+//       return {
+//         ...state,
+//         isLoading: false,
+//         movies: action.payload.movies || action.payload,
+//         filteredMovies: action.payload.movies || action.payload,
+//         filters: {
+//           ...state.filters,
+//           ...(action.payload.language && { language: action.payload.language }),
+//           ...(action.payload.genre && { genre: action.payload.genre }),
+//           ...(action.payload.year && { year: action.payload.year }),
+//           ...(action.payload.page && { page: action.payload.page }),
+//         }
+//       };
 
-    case moviesConstants.MOVIES_LIST_FAIL:
-      return { ...state, isLoading: false, isError: action.payload };
+//     case moviesConstants.MOVIES_LIST_FAIL:
+//       return { ...state, isLoading: false, isError: action.payload };
 
-    case moviesConstants.MOVIES_LIST_RESET:
-      return {
-        movies: [],
-        filteredMovies: [],
-        filters: {
-          language: "",
-          genre: "",
-          year: "",
-          page: 1,
-        },
-        isLoading: false,
-        isError: null
-      };
+//     case moviesConstants.MOVIES_LIST_RESET:
+//       return {
+//         movies: [],
+//         filteredMovies: [],
+//         filters: {
+//           language: "",
+//           genre: "",
+//           year: "",
+//           page: 1,
+//         },
+//         isLoading: false,
+//         isError: null
+//       };
 
-    case moviesConstants.UPDATE_FILTERS:
-      return {
-        ...state,
-        filters: {
-          ...state.filters,
-          ...action.payload
-        }
-      };
+//     case moviesConstants.UPDATE_FILTERS:
+//       return {
+//         ...state,
+//         filters: {
+//           ...state.filters,
+//           ...action.payload
+//         }
+//       };
 
-    case moviesConstants.APPLY_FILTERS:
-      // Client-side filtering if needed
-      const { language, genre, year } = state.filters;
-      let filtered = state.movies;
-      
-      if (language) {
-        filtered = filtered.filter(movie => 
-          movie.original_language === language
-        );
-      }
-      
-      if (genre) {
-        filtered = filtered.filter(movie => 
-          movie.genre_ids.includes(Number(genre))
-        );
-      }
-      
-      if (year) {
-        filtered = filtered.filter(movie => 
-          movie.release_date?.startsWith(year)
-        );
-      }
-      
-      return {
-        ...state,
-        filteredMovies: filtered
-      };
+//     case moviesConstants.APPLY_FILTERS:
+//       // Client-side filtering if needed
+//       const { language, genre, year } = state.filters;
+//       let filtered = state.movies;
 
-    default:
-      return state;
-  }
-};
+//       if (language) {
+//         filtered = filtered.filter(movie =>
+//           movie.original_language === language
+//         );
+//       }
+
+//       if (genre) {
+//         filtered = filtered.filter(movie =>
+//           movie.genre_ids.includes(Number(genre))
+//         );
+//       }
+
+//       if (year) {
+//         filtered = filtered.filter(movie =>
+//           movie.release_date?.startsWith(year)
+//         );
+//       }
+
+//       return {
+//         ...state,
+//         filteredMovies: filtered
+//       };
+
+//     default:
+//       return state;
+//   }
+// };
 
 // GET RANDOM MOVIES
+
 export const moviesRandomReducer = (state = { movies: [] }, action) => {
   switch (action.type) {
     case moviesConstants.MOVIES_RANDOM_REQUEST:
@@ -273,36 +281,6 @@ export const updateMovieReducer = (state = { movie: {} }, action) => {
     case moviesConstants.UPDATE_MOVIE_FAIL:
       return { isLoading: false, isError: action.payload };
     case moviesConstants.UPDATE_MOVIE_RESET:
-      return {};
-    default:
-      return state;
-  }
-};
-
-export const getMoviesGenre = (state = {}, action) => {
-  switch (action.type) {
-    case moviesConstants.MOVIE_GENRE_REQUEST:
-      return { isLoading: true };
-    case moviesConstants.MOVIE_GENRE_SUCCESS:
-      return { isLoading: false };
-    case moviesConstants.MOVIE_GENRE_FAIL:
-      return { isLoading: false, isError: action.payload };
-    case moviesConstants.MOVIE_GENRE_RESET:
-      return {};
-    default:
-      return state;
-  }
-};
-
-export const getMoviesLanguage = (state = {}, action) => {
-  switch (action.type) {
-    case moviesConstants.MOVIE_LANG_REQUEST:
-      return { isLoading: true };
-    case moviesConstants.MOVIE_LANG_SUCCESS:
-      return { isLoading: false };
-    case moviesConstants.MOVIE_LANG_FAIL:
-      return { isLoading: false, isError: action.payload };
-    case moviesConstants.MOVIE_LANG_REQUEST:
       return {};
     default:
       return state;

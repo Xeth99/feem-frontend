@@ -1,66 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-// import { fetchNowPlayingMovies } from "../../Data/FiltersData";
-import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { Link } from "react-router-dom";
 
 function Footer() {
-  const { search } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState("");
-  const [movies, setMovies] = useState([]);
-  const [pages, setPages] = useState(1);
-  const [page, setPage] = useState(1);
-
-  const dispatch = useDispatch();
-
-  // const queries = useMemo(() => {
-  //   const query = {
-  //     language: language ? language : "",
-  //     with_genres: with_genres ? with_genres : "",
-  //     page: page ? page : "",
-  //     region: region ? region : "",
-  //     search: search ? search : "",
-  //   };
-  //   return query;
-  // }, [language, with_genres, page, region, search]);
-
-  // const generateSearchLink = (newQueryParams) => {
-  //   const currentQuery = queries;
-  //   const mergedQuery = { ...currentQuery, ...newQueryParams };
-
-  //   const queryString = new URLSearchParams(
-  //     Object.entries(mergedQuery)
-  //       .filter(([_, value]) => value !== "")
-  //       .map(([key, value]) => [key, encodeURIComponent(value)])
-  //   ).toString();
-
-  //   return `/movies?${queryString}`;
-  // };
-
-   useEffect(() => {
-    // errors
-    if (isError) {
-      toast.error(isError);
-    }
-    // get all movies
-    // fetchNowPlayingMovies()
-  
-  }, [isError, dispatch]);
-
-  // useEffect(() => {
-  //   // errors
-  //   if (isError) {
-  //     toast.error(isError);
-  //   }
-  //   // get all movies
-  //   fetchNowPlayingMovies()
-  // }, [isError, dispatch, queries]);
-
-  useEffect(() => {
-    // get all movies
-    // fetchNowPlayingMovies();
-  }, []);
   const Links = [
     {
       title: "Company",
