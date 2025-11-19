@@ -4,93 +4,124 @@ import Axios from "./Axios";
 
 // Get all movies API function
 const getMoviesService = async ({ language, region, page, with_genres }) => {
-  const { data } = await Axios.get(`/movies/tmdb/now_playing`, {
-    params: {
-      language,
-      region,
-      page,
-      with_genres,
-    },
-  });
+  const { data } = await Axios.get(
+    `${process.env.REACT_APP_API_URL}/movies/tmdb/now_playing`,
+    {
+      params: {
+        language,
+        region,
+        page,
+        with_genres,
+      },
+    }
+  );
   return data;
 };
 
 // get random movies API function
 const getRandomMoviesService = async () => {
-  const { data } = await Axios.get("/movies/tmdb/popular");
+  const { data } = await Axios.get(
+    `${process.env.REACT_APP_API_URL}/movies/tmdb/popular`
+  );
   return data;
 };
 
 // get movie by id API function
 const getMovieByIdService = async (id) => {
-  const { data } = await Axios.get(`/movies/tmdb/movie/${id}/with-video`);
+  const { data } = await Axios.get(
+    `${process.env.REACT_APP_API_URL}/movies/tmdb/movie/${id}/with-video`
+  );
   return data;
 };
 
 // get top rated movies API function
 const getTopRatedMoviesService = async () => {
-  const { data } = await Axios.get("/movies/tmdb/rated/top");
+  const { data } = await Axios.get(
+    `${process.env.REACT_APP_API_URL}/movies/tmdb/rated/top`
+  );
   return data;
 };
 
 // get movie genre
 const getMovieGenre = async () => {
-  const { data } = await Axios.get("movies/tmdb/genre/movie/list");
+  const { data } = await Axios.get(
+    `${process.env.REACT_APP_API_URL}/movies/tmdb/genre/movie/list`
+  );
   return data;
 };
 
 const getMoviesLanguages = async () => {
-  const { data } = await Axios.get("/movies/configuration/languages");
+  const { data } = await Axios.get(
+    `${process.env.REACT_APP_API_URL}/movies/configuration/languages`
+  );
   return data;
 };
 
 // review movies API function
 const reviewMovieService = async (id, token, review) => {
-  const { data } = await Axios.post(`/movies/${id}/reviews`, review, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const { data } = await Axios.post(
+    `${process.env.REACT_APP_API_URL}/movies/${id}/reviews`,
+    review,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return data;
 };
 
 // delete movie API function
 const deleteMovieService = async (id, token) => {
-  const { data } = await Axios.delete(`/movies/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const { data } = await Axios.delete(
+    `${process.env.REACT_APP_API_URL}/movies/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return data;
 };
 
 // delete all movies API function
 const deleteAllMoviesService = async (token) => {
-  const { data } = await Axios.delete(`/movies`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const { data } = await Axios.delete(
+    `${process.env.REACT_APP_API_URL}/movies`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return data;
 };
 
 // create movie API function
 const addMovieService = async (movie, token) => {
-  const { data } = await Axios.post(`/movies`, movie, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const { data } = await Axios.post(
+    `${process.env.REACT_APP_API_URL}/movies`,
+    movie,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return data;
 };
 
 // update movie API function
 const updateMovieService = async (token, id, movie) => {
-  const { data } = await Axios.put(`/movies/${id}`, movie, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const { data } = await Axios.put(
+    `${process.env.REACT_APP_API_URL}/movies/${id}`,
+    movie,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return data;
 };
 
