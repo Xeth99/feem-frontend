@@ -15,8 +15,11 @@ const getMoviesService = async ({ language, region, page, with_genres }) => {
       },
     }
   );
+  console.log(data);
   return data;
 };
+
+console.log("API URL:", process.env.REACT_APP_API_URL);
 
 // get random movies API function
 const getRandomMoviesService = async () => {
