@@ -87,7 +87,7 @@ function App() {
           </Routes>
         </ScrollOnTop>
       </DrawerContext>
-      <InstallPrompt />
+      {/* <InstallPrompt /> */}
     </>
   );
 }
